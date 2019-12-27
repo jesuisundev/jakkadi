@@ -1,0 +1,127 @@
+#!/bin/bash
+
+set -e
+set -u
+
+# Colors
+Color_Off="\033[0m"       # Text Reset
+On_Red="\033[41m"         # Red
+On_Green="\033[42m"       # Green
+On_Yellow="\033[43m"      # Yellow
+On_Blue="\033[44m"        # Blue
+On_White="\033[47m"       # White
+
+# Prints info text
+function info() {
+  printf "\n${On_Blue} ${Color_Off} ${1}\n\n"
+}
+
+# Prints success text
+function success() {
+  printf "\n${On_Green} ${Color_Off} ${1}\n\n"
+}
+
+# Prints warning text
+function warn() {
+  printf "\n${On_Yellow} ${Color_Off} ${1}\n\n"
+}
+
+# Prints error text
+function error() {
+  printf "\n${On_Red} ${Color_Off} ${1}\n\n"
+}
+
+# Prints debug text
+function debug() {
+  if [[ $debugEnabled = "true" ]];then
+    printf "\n${On_White} ${Color_Off} ${1}\n\n"
+  fi
+}
+
+# Prints usage instructions
+function usage() {
+  printf "Usage: ./run-test [OPTION]...\nExecute tests on docker environment.\n\n"
+  printf "  -v, --verbose  display debug informations\n"
+  printf "  -h, --help     display this help text and exit\n"
+}
+
+# Only clean once
+cleanupDone="false"
+
+# Clean test environment
+function cleanup() {
+  if [[ $cleanupDone = "false" ]]; then
+    cleanupDone="true"
+    info "Stopping test environment..."
+    docker-compose -f docker-compose-int.yml down --volumes --rmi all --remove-orphan
+  fi
+}
+
+trap cleanup SIGINT SIGTERM SIGKILL EXIT ERR
+
+if [[ -n "${1:-}" ]];then
+  case $1 in
+    -v | --verbose )  debugEnabled="true"
+                      debug "Debug enabled"
+                      ;;
+    -h | --help )     usage
+                      exit
+                      ;;
+    * )               usage
+                      exit 1
+  esac
+else
+  debugEnabled="false"
+fi
+
+info "Stopping local environment..."
+docker-compose -f docker-compose-int.yml down --volumes --rmi all --remove-orphan
+
+info "Build image(s)"
+docker-compose -f docker-compose-int.yml build --no-cache --build-arg NODE_ENV=development
+
+info "Starting test environment..."
+docker-compose -f docker-compose-int.yml up --renew-anon-volumes --detach
+
+info "Waiting for services to start..."
+caravel="false"
+count=1
+
+set +e
+while [[ $caravel != "true" ]]
+do
+  debug "Waiting for services. Attempt : ${count}"
+  # Exit after 3 tries
+  if [[ $count -eq 4 ]]; then
+    error "Some services failed to start"
+    exit 1
+  # Wait 3 seconds between each attempt
+  elif [[ $count != 0 ]]; then
+    sleep 3
+  fi
+
+  if [[ $caravel = "false" ]]; then
+    debug "Getting caravel healthcheck"
+    status=$(docker-compose -f docker-compose-int.yml exec -T caravel node healthcheck.js)
+    debug "Status: ${status}"
+    if [[ $status = "STATUS: 200" ]]; then
+      caravel="true"
+    fi
+  fi
+
+  count=$(($count + 1))
+done
+
+info "Running tests..."
+docker-compose -f docker-compose-int.yml exec -T caravel npm run test:exec:int
+code=$?
+
+info "Test run exited with code $code"
+
+if [[ $code = "0" ]];then
+  success "Success"
+else
+  error "Error"
+fi
+
+exit $code

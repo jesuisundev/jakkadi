@@ -1,0 +1,62 @@
+{
+  "prefix": "jakkadi",
+  "port": 8080,
+  "basePath": "jakkadi",
+  "HZFLAGS": {
+    "VALIDATEREADPERMISSION": false
+  },
+  "postgres": {
+    "host": "postgres",
+    "port": 5432,
+    "database": "postgres",
+    "user": "postgres",
+    "password": "postgres"
+  },
+  "build": {
+    "orderby": [
+      "name",
+      "name.asc",
+      "name.desc",
+      "id",
+      "id.asc",
+      "id.desc",
+      "created_at",
+      "created_at.asc",
+      "created_at.desc"
+    ]
+  },
+  "cache": {
+    "redis": {
+      "host": "redis",
+      "port": 6379,
+      "user": "redis",
+      "password": "fake-password",
+      "total_retry": 5,
+      "total_retry_time": 60000,
+      "ttl": 3
+    },
+    "redlock": {
+      "driftFactor": 0.01,
+      "retryCount": 10,
+      "retryDelay": 200,
+      "retryJitter": 200,
+      "defaultTTL": 60
+    }
+  },
+  "logger": {
+    "logLevel": "debug",
+    "morganFields": [
+      "method",
+      "url",
+      "status",
+      "content-length",
+      "response-time-ms"
+    ],
+    "customFormats": {
+      "stack": "replace(\/(\\r\\n|\\n|\\r)\/gm, '')"
+    }
+  },
+  "multer": {
+    "fileSize": 104857600
+  }
+}
