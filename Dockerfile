@@ -4,7 +4,7 @@
 # base default image for shared
 # envs
 # -------------------------------
-FROM node:10.16.0-alpine AS base
+FROM node:13.12.0-alpine3.11 AS base
 
 ARG NODE_ENV=${NODE_ENV:-"production"}
 ARG NPM_CONFIG_LOGLEVEL=${NPM_CONFIG_LOGLEVEL:-"warn"}
