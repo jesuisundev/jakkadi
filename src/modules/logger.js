@@ -4,12 +4,12 @@ const winston = require('winston')
 
 /**
  * Generate configuration object from Winston
- * @param {object} config object containing app configuration 
+ * @param {object} config object containing app configuration
  * @param {filename} filename name of the file logged
  *
  * @return Object
  */
-function generate(config, filename) {
+function generate (config, filename) {
   const logger = winston.createLogger({
     level: config.logger.logLevel,
     format: winston.format.json(),
@@ -19,7 +19,7 @@ function generate(config, filename) {
       new winston.transports.File({ filename: 'combined.log' })
     ]
   })
-        
+
   if (process.env.NODE_ENV !== 'production') {
     logger.add(new winston.transports.Console({ format: winston.format.simple() }))
   }
