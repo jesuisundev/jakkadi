@@ -7,10 +7,10 @@ const path = require('path')
  * Refer to https://github.com/salsita/node-pg-migrate/issues/37 for an example
  */
 
-const dbUser = process.env['HZ_CARAVEL_POSTGRES_USER']
-const dbPass = process.env['HZ_CARAVEL_POSTGRES_PASSWORD']
-const dbName = process.env['HZ_CARAVEL_POSTGRES_DATABASE']
-const dbHost = process.env['HZ_CARAVEL_POSTGRES_HOST']
+const dbUser = process.env['JAKKADI_POSTGRES_USER']
+const dbPass = process.env['JAKKADI_POSTGRES_PASSWORD']
+const dbName = process.env['JAKKADI_POSTGRES_DATABASE']
+const dbHost = process.env['JAKKADI_POSTGRES_HOST']
 
 const databaseUrl = `postgres://${dbUser}:${dbPass}@${dbHost}:5432/${dbName}`
 

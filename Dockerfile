@@ -28,7 +28,6 @@ RUN apk --no-cache --virtual build-dependencies add \
 WORKDIR /usr/src/app/
 
 ## install dependencies
-COPY .npmrc ./
 COPY package*.json ./
 RUN npm ci
 
@@ -44,5 +43,5 @@ RUN apk --update add postgresql-client
 WORKDIR /usr/src/app/
 COPY . .
 
-EXPOSE 8085
+EXPOSE 8080
 CMD ["sh", "init-service.sh"]
