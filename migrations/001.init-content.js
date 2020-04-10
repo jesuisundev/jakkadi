@@ -1,69 +1,93 @@
 exports.up = pgm => {
   /**
-    Create service datatable corresponding to this SQL statement
-    CREATE TABLE webapp (
-    id serial PRIMARY KEY,
-    slug varchar(255) NOT NULL UNIQUE,
-    name varchar(255) NOT NULL,
-    description text,
-    repository text,
-    token varchar(255)
+    CREATE TABLE user (
+      id serial PRIMARY KEY,
+      username varchar(255) NOT NULL UNIQUE,
+      email varchar(255) NOT NULL UNIQUE,
+      password varchar(255) NOT NULL,
+      idPhoto serial,
+      created_at timestamp DEFAULT CURRENT_TIMESTAMP
     );
   */
-  pgm.createTable('webapp', {
+  pgm.createTable('user', {
     id: { primaryKey: true, type: 'serial' },
-    slug: { type: 'varchar(255)', notNull: true, unique: true },
-    name: { type: 'varchar(255)', notNull: true },
+    username: { type: 'varchar(255)', notNull: true, unique: true },
+    email: { type: 'varchar(255)', notNull: true, unique: true },
+    password: { type: 'varchar(255)', notNull: true },
+    idPhoto: { type: 'serial' },
+    created_at: { type: 'timestamp', DEFAULT: Date.now() }
+  })
+
+  /**
+    CREATE TABLE photo (
+      id serial PRIMARY KEY,
+      idUser serial NOT NULL,
+      idChallenge serial,
+      description text,
+      path text NOT NULL,
+      created_at timestamp DEFAULT CURRENT_TIMESTAMP
+    );
+  */
+  pgm.createTable('photo', {
+    id: { primaryKey: true, type: 'serial' },
+    idUser: { primaryKey: true, type: 'serial', notNull: true },
+    idChallenge: { primaryKey: true, type: 'serial' },
     description: { type: 'text' },
-    repository: { type: 'text' },
-    token: { type: 'varchar(255)' }
+    path: { type: 'text', notNull: true },
+    created_at: { type: 'timestamp', DEFAULT: Date.now() }
   })
 
   /**
-    Create build datatable corresponding to this SQL statement
-    CREATE TABLE build (
-    id varchar(255) PRIMARY KEY,
-    webapp_id integer,
-    name varchar(255) NOT NULL,
-    url text,
-    created_at timestamp,
-    deleted boolean
+    CREATE TABLE like (
+      id serial PRIMARY KEY,
+      idUser serial NOT NULL,
+      idChallenge serial,
+      created_at timestamp DEFAULT CURRENT_TIMESTAMP
     );
   */
-  pgm.createTable('build', {
-    id: { primaryKey: true, type: 'varchar(255)' },
-    webapp_id: { type: 'integer' },
+  pgm.createTable('like', {
+    id: { primaryKey: true, type: 'serial' },
+    idUser: { primaryKey: true, type: 'serial', notNull: true },
+    idChallenge: { primaryKey: true, type: 'serial' },
+    created_at: { type: 'timestamp', DEFAULT: Date.now() }
+  })
+
+  /**
+    CREATE TABLE challenge (
+      id serial PRIMARY KEY,
+      name varchar(255) NOT NULL,
+      description text NOT NULL,
+      date_start timestamp NOT NULL,
+      date_end timestamp NOT NULL,
+      isActive boolean DEFAULT true,
+      created_at timestamp DEFAULT CURRENT_TIMESTAMP
+    );
+  */
+  pgm.createTable('challenge', {
+    id: { primaryKey: true, type: 'serial' },
     name: { type: 'varchar(255)', notNull: true },
-    url: { type: 'text' },
-    deleted: { type: 'boolean', default: false },
-    created_at: { type: 'timestamp' }
-  })
-
-  /**
-    Create service datatable corresponding to this SQL statement
-    CREATE TABLE vstage (
-    vstage varchar(255) PRIMARY KEY,
-    webapp_id integer PRIMARY KEY,
-    build_id varchar(255)
-    );
-  */
-  pgm.createTable('vstage', {
-    vstage: { primaryKey: true, type: 'varchar(255)' },
-    webapp_id: { primaryKey: true, type: 'integer' },
-    build_id: { type: 'varchar(255)' }
+    description: { type: 'text', notNull: true },
+    date_start: { type: 'timestamp', notNull: true },
+    date_end: { type: 'timestamp', notNull: true },
+    isActive: { type: 'boolean', DEFAULT: true },
+    created_at: { type: 'timestamp', DEFAULT: Date.now() }
   })
 }
 
 exports.down = pgm => {
-  pgm.dropTable('vstage', {
+  pgm.dropTable('user', {
     ifExists: true
   })
 
-  pgm.dropTable('build', {
+  pgm.dropTable('photo', {
     ifExists: true
   })
 
-  pgm.dropTable('webapp', {
+  pgm.dropTable('like', {
+    ifExists: true
+  })
+
+  pgm.dropTable('challenge', {
     ifExists: true
   })
 }
