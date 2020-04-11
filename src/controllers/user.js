@@ -61,11 +61,11 @@ async function postUser (req, res) {
   try {
     logger.debug(`postUser`)
 
-    return []
+    res.status(201).json({})
   } catch (error) {
     logger.debug(error)
 
-    throw new Error(error)
+    res.status(500).json(error)
   }
 }
 

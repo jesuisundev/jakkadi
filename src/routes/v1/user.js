@@ -4,6 +4,8 @@ const Joi = require('joi')
 const path = require('path')
 const controllersPath = '../../controllers/'
 
+const usernameRegex = /^[a-zA-Z0-9-_*]{3,25}$/
+
 module.exports = [
   {
     method: 'get',
@@ -30,7 +32,11 @@ module.exports = [
     handler: require(path.join(controllersPath, 'user')).postUser,
     description: 'Create a user',
     validate: {
-      body: {}
+      body: {
+        username: Joi.string().regex(usernameRegex).required().description('Specify the username of the user').example('supertoto'),
+        email: Joi.string().email().required().description('Specify the email of the user').example('supertoto@free.com'),
+        password: Joi.string().required().description('Specify the password of the user').example('supertoto')
+      }
     },
     tags: ['user']
   },

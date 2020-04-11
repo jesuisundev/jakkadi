@@ -17,7 +17,6 @@ module.exports = function (config) {
 
     app.use(bodyParser.json())
 
-    // Loading the API routes
     let routes = route4express(path.join(__dirname, '/routes'), config.basePath)
 
     routes = routes.map(route => {
@@ -41,16 +40,24 @@ module.exports = function (config) {
      * @return {Object}       server response
      */
     app.use((err, req, res, next) => {
-      const payload = {
-        info: {
-          message: 'expressjs middleware global error',
-          origin: 'Bootstrap.js - global express error handler'
-        }
+      const finalError = {
+        origin: 'Bootstrap.js - global express error handler',
+        output: {}
       }
 
-      logger.error(err)
+      if (err.isBoom) {
+        logger.debug(`err.isBoom detected`)
+        finalError.statusCode = err.output.statusCode
+        finalError.output = err.output
+      } else if (err.statusCode) {
+        logger.debug(`err.statusCode detected : ${err.statusCode}`)
+        finalError.statusCode = err.statusCode
+        finalError.output = err
+      }
 
-      res.status(500).json(payload)
+      logger.error(JSON.stringify(finalError))
+
+      res.status(finalError.statusCode).json(finalError.output)
     })
 
     return app
