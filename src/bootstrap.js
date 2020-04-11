@@ -1,6 +1,7 @@
 'use strict'
 
 const path = require('path')
+const db = require(path.resolve('src/modules/pg-manager'))
 const express = require('express')
 const bodyParser = require('body-parser')
 const os = require('os')
@@ -13,6 +14,10 @@ module.exports = function (config) {
     throw new Error('No configuration passed to the initialisation step')
   } else {
     const logger = require(path.join(__dirname, '/modules/logger.js')).generate(config, 'bootstrap')
+
+    // configure pg manager
+    db.configure(config.postgres, logger)
+
     const app = express()
 
     app.use(bodyParser.json())

@@ -3,7 +3,7 @@
 const path = require('path')
 const config = require(path.resolve('config/config.json'))
 const logger = require(path.resolve('src/modules/logger')).generate(config, module.filename)
-
+const userModel = require(path.resolve('src/models/user'))
 /**
  *
  * @param {Object} req express request object
@@ -60,6 +60,9 @@ async function deleteUser (req, res) {
 async function postUser (req, res) {
   try {
     logger.debug(`postUser`)
+
+    // TODO - auth middleware
+    await userModel.createUser(req.body)
 
     res.status(201).json({})
   } catch (error) {

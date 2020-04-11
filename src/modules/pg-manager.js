@@ -1,7 +1,6 @@
 'use strict'
 const { Pool } = require('pg')
 
-// used when hz-logger is not passed
 const _defaultLogger = {
   debug: (msg) => console.log(msg),
   error: (msg) => console.log(msg),
