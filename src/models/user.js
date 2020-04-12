@@ -4,6 +4,7 @@ const path = require('path')
 const db = require(path.resolve('src/modules/pg-manager'))
 const config = require(path.resolve('config/config.json'))
 const logger = require(path.resolve('src/modules/logger')).generate(config, module.filename)
+const common = require(path.resolve('src/modules/common'))
 
 /**
  * Create a user from the user object provided
@@ -24,17 +25,27 @@ async function createUser (user) {
 
     logger.debug(`[createUser - : ${user.username} - success]`)
 
-    return rows[0]
+    return rows
   } catch (error) {
     logger.debug(`[createUser - : ${user.username} - failed]`)
 
-    throw error
+    // postgres unique violation
+    if (error.code === '23505') {
+      const message = error.constraint === 'user_username_key'
+        ? `Username ${user.username} already exists.`
+        : `Email ${user.email} already exists.`
+
+      throw common.buildError(409, message)
+    }
+
+    throw common.buildError(500)
   }
 }
 
 function _createUserBuildSql (user) {
+  const dbQuery = `INSERT INTO "user" (username, email, password) VALUES ($1, $2, $3);`
+
   // TODO - encode password
-  const dbQuery = `INSERT INTO user (username, email, password) VALUES ($1, $2, $3) RETURNING *;`
 
   const dbQueryValues = [
     user.username,

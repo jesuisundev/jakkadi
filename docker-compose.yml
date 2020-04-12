@@ -35,7 +35,7 @@ services:
 
   postgres:
     image: postgres
-    container_name: pg_caravel
+    container_name: pg_jakkadi
     environment:
       POSTGRES_DB: ${JAKKADI_POSTGRES_DATABASE:-jakkadi}
       POSTGRES_USER: ${JAKKADI_POSTGRES_USER:-jakkadi}

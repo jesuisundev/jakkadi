@@ -5,7 +5,7 @@ exports.up = pgm => {
       username varchar(255) NOT NULL UNIQUE,
       email varchar(255) NOT NULL UNIQUE,
       password varchar(255) NOT NULL,
-      idPhoto serial,
+      idPhoto serial DEFAULT NULL,
       created_at timestamp DEFAULT CURRENT_TIMESTAMP
     );
   */
@@ -14,7 +14,7 @@ exports.up = pgm => {
     username: { type: 'varchar(255)', notNull: true, unique: true },
     email: { type: 'varchar(255)', notNull: true, unique: true },
     password: { type: 'varchar(255)', notNull: true },
-    idPhoto: { type: 'serial' },
+    idPhoto: { type: 'serial', DEFAULT: null },
     created_at: { type: 'timestamp', DEFAULT: Date.now() }
   })
 

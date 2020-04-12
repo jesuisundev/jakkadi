@@ -62,13 +62,14 @@ async function postUser (req, res) {
     logger.debug(`postUser`)
 
     // TODO - auth middleware
+
     await userModel.createUser(req.body)
 
-    res.status(201).json({})
+    res.status(201)
   } catch (error) {
     logger.debug(error)
 
-    res.status(500).json(error)
+    res.status(error.statusCode).json(error.output)
   }
 }
 

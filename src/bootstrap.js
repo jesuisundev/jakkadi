@@ -45,17 +45,16 @@ module.exports = function (config) {
      * @return {Object}       server response
      */
     app.use((err, req, res, next) => {
+      logger.debug(`[global express error handler]`)
+
       const finalError = {
-        origin: 'Bootstrap.js - global express error handler',
         output: {}
       }
 
       if (err.isBoom) {
-        logger.debug(`err.isBoom detected`)
         finalError.statusCode = err.output.statusCode
         finalError.output = err.output
       } else if (err.statusCode) {
-        logger.debug(`err.statusCode detected : ${err.statusCode}`)
         finalError.statusCode = err.statusCode
         finalError.output = err
       }
