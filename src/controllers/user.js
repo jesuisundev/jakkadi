@@ -1,9 +1,11 @@
 'use strict'
 
 const path = require('path')
+
 const config = require(path.resolve('config/config.json'))
 const logger = require(path.resolve('src/modules/logger')).generate(config, module.filename)
 const userModel = require(path.resolve('src/models/user'))
+
 /**
  *
  * @param {Object} req express request object
@@ -67,7 +69,7 @@ async function postUser (req, res) {
 
     res.status(201)
   } catch (error) {
-    logger.debug(error)
+    logger.error(JSON.stringify(error))
 
     res.status(error.statusCode).json(error.output)
   }
