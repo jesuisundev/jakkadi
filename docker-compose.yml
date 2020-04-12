@@ -21,7 +21,8 @@ services:
       JAKKADI_POSTGRES_PASSWORD: ${JAKKADI_POSTGRES_PASSWORD:-jakkadi}
       JAKKADI_POSTGRES_HOST: ${JAKKADI_POSTGRES_HOST:-postgres}
     volumes:
-      - ${PWD}:/usr/src/app
+      - .:/usr/src/app
+      - '/usr/src/app/node_modules/'
     logging:
       driver: json-file
       options:

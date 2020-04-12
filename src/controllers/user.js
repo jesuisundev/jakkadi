@@ -67,7 +67,7 @@ async function postUser (req, res) {
 
     await userModel.createUser(req.body)
 
-    res.status(201)
+    res.status(201).json({})
   } catch (error) {
     logger.error(JSON.stringify(error))
 

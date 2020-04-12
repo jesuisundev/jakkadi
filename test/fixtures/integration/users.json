@@ -1,0 +1,11 @@
+{
+  "post": {
+    "input": {
+      "valid" : {
+        "username": "superToto",
+        "email": "superToto@supertoto.com",
+        "password": "test"
+      }
+    }
+  }
+}

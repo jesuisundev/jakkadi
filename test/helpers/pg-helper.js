@@ -2,11 +2,6 @@
 
 const path = require('path')
 
-/**
- * The geniuses at node-pg-migrate decided not to documente this.
- * Refer to https://github.com/salsita/node-pg-migrate/issues/37 for an example
- */
-
 const dbUser = process.env['JAKKADI_POSTGRES_USER']
 const dbPass = process.env['JAKKADI_POSTGRES_PASSWORD']
 const dbName = process.env['JAKKADI_POSTGRES_DATABASE']
