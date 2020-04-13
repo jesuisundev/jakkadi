@@ -35,9 +35,41 @@ describe('Integration test - User', () => {
           expect(res.body).to.be.an('object')
         })
     })
+
+    it('GET - Get user with good payload should respond 200', async () => {
+      const options = generatePayload(
+        `/jakkadi/v1/user/1`,
+        'GET',
+        {},
+        { 'Content-Type': 'application/json' }
+      )
+      const prom = rp(options)
+
+      return prom.should.be.fulfilled
+        .then(res => {
+          expect(res.statusCode).to.equal(200)
+          expect(res.body).to.be.an('object')
+        })
+    })
   })
 
   describe('[SCENARIO] Failure cases', () => {
+    it('POST - Post same user should respond 409', async () => {
+      const currentPayload = _.cloneDeep(fixtures.post.input.valid)
+      const options = generatePayload(
+        `/jakkadi/v1/user`,
+        'POST',
+        currentPayload,
+        { 'Content-Type': 'application/json' }
+      )
+      const prom = rp(options)
+
+      return prom.should.be.rejected
+        .then(res => {
+          expect(res.statusCode).to.equal(409)
+        })
+    })
+
     it('POST - Post user with bad payload should respond 400', () => {
       const currentPayload = {}
       const options = generatePayload(
