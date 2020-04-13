@@ -9,6 +9,7 @@ const common = require(path.resolve('src/modules/common'))
 /**
  * Create a user from the user object provided
  *
+ * @async
  * @param {Object} user from the controller
  * @returns {Promise}
  */
@@ -42,6 +43,12 @@ async function createUser (user) {
   }
 }
 
+/**
+ * Create the SQL to create a user
+ *
+ * @param {Object} user user body object
+ * @returns {Object}
+ */
 function _createUserBuildSql (user) {
   const dbQuery = `INSERT INTO "user" (username, email, password) VALUES ($1, $2, $3);`
 
@@ -56,6 +63,54 @@ function _createUserBuildSql (user) {
   return { dbQuery, dbQueryValues }
 }
 
+/**
+ * Get a user from the user object provided
+ *
+ * @async
+ * @param {Object} user from the controller
+ * @returns {Promise}
+ */
+async function getUser (idUser) {
+  try {
+    logger.debug(`[getUser - user id: ${idUser}]`)
+
+    const getUserSqlQuery = _getUserBuildSql(idUser)
+
+    const { rows } = await db.getInstance().query(
+      getUserSqlQuery.dbQuery,
+      getUserSqlQuery.dbQueryValues
+    )
+
+    if (!rows.length) {
+      const message = `User does not exist`
+
+      return Promise.reject(common.buildError(404, message))
+    }
+
+    logger.debug(`[getUser - : ${idUser} - success]`)
+
+    return rows[0]
+  } catch (error) {
+    logger.error(JSON.stringify(error))
+
+    throw common.buildError(500)
+  }
+}
+
+/**
+ * Create the SQL to get a user
+ *
+ * @param {String} idUser user id
+ * @returns {Object}
+ */
+function _getUserBuildSql (idUser) {
+  const dbQuery = `SELECT id, username, email, id_photo, created_at FROM "user" WHERE "id" = $1;`
+  const dbQueryValues = [ idUser ]
+
+  return { dbQuery, dbQueryValues }
+}
+
 module.exports = {
-  createUser
+  createUser,
+  getUser
 }

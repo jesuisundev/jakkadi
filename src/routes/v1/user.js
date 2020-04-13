@@ -16,12 +16,12 @@ module.exports = [
   },
   {
     method: 'get',
-    url: '/user/:user_id',
+    url: '/user/:id_user',
     description: 'Get a user',
     handler: require(path.join(controllersPath, 'user')).getUser,
     validate: {
       params: {
-        user_id: Joi.number().required().description('Specify the id of the user').example('1')
+        id_user: Joi.number().required().description('Specify the id of the user').example('1')
       }
     },
     tags: ['user']

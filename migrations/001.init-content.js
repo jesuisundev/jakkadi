@@ -5,7 +5,7 @@ exports.up = pgm => {
       username varchar(255) NOT NULL UNIQUE,
       email varchar(255) NOT NULL UNIQUE,
       password varchar(255) NOT NULL,
-      idPhoto serial DEFAULT NULL,
+      id_photo serial DEFAULT NULL,
       created_at timestamp DEFAULT CURRENT_TIMESTAMP
     );
   */
@@ -14,15 +14,15 @@ exports.up = pgm => {
     username: { type: 'varchar(255)', notNull: true, unique: true },
     email: { type: 'varchar(255)', notNull: true, unique: true },
     password: { type: 'varchar(255)', notNull: true },
-    idPhoto: { type: 'serial', DEFAULT: null },
+    id_photo: { type: 'serial', DEFAULT: null },
     created_at: { type: 'timestamp', DEFAULT: Date.now() }
   })
 
   /**
     CREATE TABLE photo (
       id serial PRIMARY KEY,
-      idUser serial NOT NULL,
-      idChallenge serial,
+      id_user serial NOT NULL,
+      id_challenge serial,
       description text,
       path text NOT NULL,
       created_at timestamp DEFAULT CURRENT_TIMESTAMP
@@ -30,8 +30,8 @@ exports.up = pgm => {
   */
   pgm.createTable('photo', {
     id: { primaryKey: true, type: 'serial' },
-    idUser: { primaryKey: true, type: 'serial', notNull: true },
-    idChallenge: { primaryKey: true, type: 'serial' },
+    id_user: { primaryKey: true, type: 'serial', notNull: true },
+    id_challenge: { primaryKey: true, type: 'serial' },
     description: { type: 'text' },
     path: { type: 'text', notNull: true },
     created_at: { type: 'timestamp', DEFAULT: Date.now() }
@@ -40,15 +40,15 @@ exports.up = pgm => {
   /**
     CREATE TABLE like (
       id serial PRIMARY KEY,
-      idUser serial NOT NULL,
-      idChallenge serial,
+      id_user serial NOT NULL,
+      id_challenge serial,
       created_at timestamp DEFAULT CURRENT_TIMESTAMP
     );
   */
   pgm.createTable('like', {
     id: { primaryKey: true, type: 'serial' },
-    idUser: { primaryKey: true, type: 'serial', notNull: true },
-    idChallenge: { primaryKey: true, type: 'serial' },
+    id_user: { primaryKey: true, type: 'serial', notNull: true },
+    id_challenge: { primaryKey: true, type: 'serial' },
     created_at: { type: 'timestamp', DEFAULT: Date.now() }
   })
 
@@ -59,7 +59,7 @@ exports.up = pgm => {
       description text NOT NULL,
       date_start timestamp NOT NULL,
       date_end timestamp NOT NULL,
-      isActive boolean DEFAULT true,
+      is_active boolean DEFAULT true,
       created_at timestamp DEFAULT CURRENT_TIMESTAMP
     );
   */
@@ -69,7 +69,7 @@ exports.up = pgm => {
     description: { type: 'text', notNull: true },
     date_start: { type: 'timestamp', notNull: true },
     date_end: { type: 'timestamp', notNull: true },
-    isActive: { type: 'boolean', DEFAULT: true },
+    is_active: { type: 'boolean', DEFAULT: true },
     created_at: { type: 'timestamp', DEFAULT: Date.now() }
   })
 }

@@ -31,11 +31,15 @@ async function getUser (req, res) {
   try {
     logger.debug(`getUser`)
 
-    return []
-  } catch (error) {
-    logger.debug(error)
+    // TODO - auth middleware
 
-    throw new Error(error)
+    const user = await userModel.getUser(req.params.id_user)
+
+    res.status(200).json(user)
+  } catch (error) {
+    logger.error(JSON.stringify(error))
+
+    res.status(error.statusCode).json(error.output)
   }
 }
 
