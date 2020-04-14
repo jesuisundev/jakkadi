@@ -42,12 +42,12 @@ module.exports = [
   },
   {
     method: 'delete',
-    url: '/user/:user_id',
+    url: '/user/:id_user',
     handler: require(path.join(controllersPath, 'user')).deleteUser,
     description: 'Delete a user',
     validate: {
       params: {
-        user_id: Joi.number().required().description('Specify the id of the user').example('1')
+        id_user: Joi.number().required().description('Specify the id of the user').example('1')
       }
     },
     tags: ['user']

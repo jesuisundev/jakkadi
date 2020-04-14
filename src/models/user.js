@@ -110,7 +110,55 @@ function _getUserBuildSql (idUser) {
   return { dbQuery, dbQueryValues }
 }
 
+/**
+ * Delete a user from the user object provided
+ *
+ * @async
+ * @param {Integer} idUser id from the controller
+ * @returns {Promise}
+ */
+async function deleteUser (idUser) {
+  try {
+    logger.debug(`[deleteUser - user id: ${idUser}]`)
+
+    const deleteUserSqlQuery = _deleteUserBuildSql(idUser)
+
+    const result = await db.getInstance().query(
+      deleteUserSqlQuery.dbQuery,
+      deleteUserSqlQuery.dbQueryValues
+    )
+
+    if (!result.rowCount) {
+      const message = `User does not exist`
+
+      return Promise.reject(common.buildError(404, message))
+    }
+
+    logger.debug(`[deleteUser - : ${idUser} - success]`)
+
+    return {}
+  } catch (error) {
+    logger.error(JSON.stringify(error))
+
+    throw common.buildError(500)
+  }
+}
+
+/**
+ * Create the SQL to delete a user
+ *
+ * @param {String} idUser user id
+ * @returns {Object}
+ */
+function _deleteUserBuildSql (idUser) {
+  const dbQuery = `DELETE FROM "user" WHERE "id" = $1;`
+  const dbQueryValues = [ idUser ]
+
+  return { dbQuery, dbQueryValues }
+}
+
 module.exports = {
   createUser,
-  getUser
+  getUser,
+  deleteUser
 }

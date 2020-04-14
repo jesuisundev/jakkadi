@@ -49,13 +49,17 @@ async function getUser (req, res) {
  */
 async function deleteUser (req, res) {
   try {
-    logger.debug(`deleteUser`)
+    logger.debug(`getUser`)
 
-    return []
+    // TODO - auth middleware
+
+    await userModel.deleteUser(req.params.id_user)
+
+    res.status(204).json({})
   } catch (error) {
-    logger.debug(error)
+    logger.error(JSON.stringify(error))
 
-    throw new Error(error)
+    res.status(error.statusCode).json(error.output)
   }
 }
 
