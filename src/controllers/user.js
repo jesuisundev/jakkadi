@@ -49,7 +49,7 @@ async function getUser (req, res) {
  */
 async function deleteUser (req, res) {
   try {
-    logger.debug(`getUser`)
+    logger.debug(`deleteUser`)
 
     // TODO - auth middleware
 

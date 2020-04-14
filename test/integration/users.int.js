@@ -51,9 +51,7 @@ describe('Integration test - User', () => {
           expect(res.body).to.be.an('object')
         })
     })
-  })
 
-  describe('[SCENARIO] Failure cases', () => {
     it('POST - Post same user should respond 409', async () => {
       const currentPayload = _.cloneDeep(fixtures.post.input.valid)
       const options = generatePayload(
@@ -83,6 +81,36 @@ describe('Integration test - User', () => {
       return prom.should.be.rejected
         .then(res => {
           expect(res.statusCode).to.equal(400)
+        })
+    })
+
+    it('DELETE - delete same user should respond 204', async () => {
+      const options = generatePayload(
+        `/jakkadi/v1/user/1`,
+        'DELETE',
+        {},
+        { 'Content-Type': 'application/json' }
+      )
+      const prom = rp(options)
+
+      return prom.should.be.fulfilled
+        .then(res => {
+          expect(res.statusCode).to.equal(204)
+        })
+    })
+
+    it('DELETE - delete same user again should respond 404', async () => {
+      const options = generatePayload(
+        `/jakkadi/v1/user/1`,
+        'DELETE',
+        {},
+        { 'Content-Type': 'application/json' }
+      )
+      const prom = rp(options)
+
+      return prom.should.be.rejected
+        .then(res => {
+          expect(res.statusCode).to.equal(404)
         })
     })
   })

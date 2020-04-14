@@ -18,7 +18,8 @@ describe('Unit test - Controller - User', () => {
     function initMocks () {
       mockUserModel = {
         createUser: sinon.stub().resolves(),
-        getUser: sinon.stub().resolves()
+        getUser: sinon.stub().resolves(),
+        deleteUser: sinon.stub().resolves()
       }
 
       mockery.registerMock(path.resolve('src/models/user'), mockUserModel)
@@ -87,6 +88,31 @@ describe('Unit test - Controller - User', () => {
     })
 
     describe('DELETE user', () => {
+      it('On success : should return 204', async () => {
+        initMocks()
+
+        const userController = require(path.resolve('src/controllers/user'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        await userController.deleteUser(req, res)
+
+        expect(res.statusCode).to.equal(204)
+      })
+
+      it('On error : should return 500', async () => {
+        initMocks()
+
+        mockUserModel.deleteUser = sinon.stub().rejects(common.buildError())
+
+        const userController = require(path.resolve('src/controllers/user'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        await userController.deleteUser(req, res)
+
+        expect(res.statusCode).to.equal(500)
+      })
     })
   })
 })
