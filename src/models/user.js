@@ -111,6 +111,49 @@ function _getUserBuildSql (idUser) {
 }
 
 /**
+ * Get a user list from the query object provided
+ *
+ * @async
+ * @param {Object} query from the controller
+ * @returns {Promise}
+ */
+async function listUsers (query) {
+  try {
+    logger.debug(`[listUsers]`)
+
+    // TODO - handle pagination with query (offset, limit)
+
+    const getListUsersSqlQuery = _getListUsersBuildSql(query)
+
+    const { rows } = await db.getInstance().query(
+      getListUsersSqlQuery.dbQuery,
+      getListUsersSqlQuery.dbQueryValues
+    )
+
+    logger.debug(`[listUsers - success]`)
+
+    return rows
+  } catch (error) {
+    logger.error(JSON.stringify(error))
+
+    throw common.buildError(500)
+  }
+}
+
+/**
+ * Create the SQL to get a users list
+ *
+ * @param {String} options user id
+ * @returns {Object}
+ */
+function _getListUsersBuildSql (options) {
+  const dbQuery = `SELECT id, username, email, id_photo, created_at FROM "user" LIMIT 100;`
+  const dbQueryValues = []
+
+  return { dbQuery, dbQueryValues }
+}
+
+/**
  * Delete a user from the user object provided
  *
  * @async
@@ -160,5 +203,6 @@ function _deleteUserBuildSql (idUser) {
 module.exports = {
   createUser,
   getUser,
+  listUsers,
   deleteUser
 }

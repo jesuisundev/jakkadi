@@ -52,6 +52,22 @@ describe('Integration test - User', () => {
         })
     })
 
+    it('GET - Get list user with good payload should respond 200', async () => {
+      const options = generatePayload(
+        `/jakkadi/v1/user`,
+        'GET',
+        {},
+        { 'Content-Type': 'application/json' }
+      )
+      const prom = rp(options)
+
+      return prom.should.be.fulfilled
+        .then(res => {
+          expect(res.statusCode).to.equal(200)
+          expect(res.body).to.be.an('array')
+        })
+    })
+
     it('POST - Post same user should respond 409', async () => {
       const currentPayload = _.cloneDeep(fixtures.post.input.valid)
       const options = generatePayload(

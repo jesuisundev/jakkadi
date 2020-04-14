@@ -15,11 +15,15 @@ async function listUsers (req, res) {
   try {
     logger.debug(`listUsers`)
 
-    return []
-  } catch (error) {
-    logger.debug(error)
+    // TODO - auth middleware
 
-    throw new Error(error)
+    const users = await userModel.listUsers(req.query)
+
+    res.status(200).json(users)
+  } catch (error) {
+    logger.error(JSON.stringify(error))
+
+    res.status(error.statusCode).json(error.output)
   }
 }
 

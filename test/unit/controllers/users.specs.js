@@ -19,7 +19,8 @@ describe('Unit test - Controller - User', () => {
       mockUserModel = {
         createUser: sinon.stub().resolves(),
         getUser: sinon.stub().resolves(),
-        deleteUser: sinon.stub().resolves()
+        deleteUser: sinon.stub().resolves(),
+        listUsers: sinon.stub().resolves()
       }
 
       mockery.registerMock(path.resolve('src/models/user'), mockUserModel)
@@ -82,6 +83,31 @@ describe('Unit test - Controller - User', () => {
     })
 
     describe('GET list user', () => {
+      it('On success : should return 200', async () => {
+        initMocks()
+
+        const userController = require(path.resolve('src/controllers/user'))
+        const req = httpMocks.createRequest({ query: {} })
+        const res = httpMocks.createResponse()
+
+        await userController.listUsers(req, res)
+
+        expect(res.statusCode).to.equal(200)
+      })
+
+      it('On error : should return 500', async () => {
+        initMocks()
+
+        mockUserModel.listUsers = sinon.stub().rejects(common.buildError())
+
+        const userController = require(path.resolve('src/controllers/user'))
+        const req = httpMocks.createRequest({ query: {} })
+        const res = httpMocks.createResponse()
+
+        await userController.listUsers(req, res)
+
+        expect(res.statusCode).to.equal(500)
+      })
     })
 
     describe('GET count user', () => {
