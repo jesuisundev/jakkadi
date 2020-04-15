@@ -11,6 +11,11 @@ module.exports = [
     method: 'get',
     url: '/user/',
     handler: require(path.join(controllersPath, 'user')).listUsers,
+    validate: {
+      query: {
+        count: Joi.number().description('Boolean to get count of users').example('1')
+      }
+    },
     description: 'Get the list of users. Note that if there are no users, an empty array will be returned.',
     tags: ['user']
   },

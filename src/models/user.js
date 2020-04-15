@@ -200,9 +200,52 @@ function _deleteUserBuildSql (idUser) {
   return { dbQuery, dbQueryValues }
 }
 
+/**
+ * Count user
+ *
+ * @async
+ * @returns {Promise}
+ */
+async function countUser () {
+  try {
+    logger.debug(`[countUser]`)
+
+    // TODO - node-cache
+
+    const getCountUsersSqlQuery = _getCountUsersBuildSql()
+
+    const { rows } = await db.getInstance().query(
+      getCountUsersSqlQuery.dbQuery,
+      getCountUsersSqlQuery.dbQueryValues
+    )
+
+    logger.debug(`[countUser - success]`)
+
+    return rows
+  } catch (error) {
+    logger.error(JSON.stringify(error))
+
+    throw common.buildError(500)
+  }
+}
+
+/**
+ * Create the SQL to count users
+ *
+ * @param {String} options user id
+ * @returns {Object}
+ */
+function _getCountUsersBuildSql () {
+  const dbQuery = `SELECT count(*) FROM "user";`
+  const dbQueryValues = []
+
+  return { dbQuery, dbQueryValues }
+}
+
 module.exports = {
   createUser,
   getUser,
   listUsers,
+  countUser,
   deleteUser
 }

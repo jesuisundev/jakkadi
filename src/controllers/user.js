@@ -12,18 +12,22 @@ const userModel = require(path.resolve('src/models/user'))
  * @param {Object} res express response object
  */
 async function listUsers (req, res) {
-  try {
-    logger.debug(`listUsers`)
+  if (req.query && req.query.count) {
+    await countUser(req, res)
+  } else {
+    try {
+      logger.debug(`listUsers`)
 
-    // TODO - auth middleware
+      // TODO - auth middleware
 
-    const users = await userModel.listUsers(req.query)
+      const users = await userModel.listUsers(req.query)
 
-    res.status(200).json(users)
-  } catch (error) {
-    logger.error(JSON.stringify(error))
+      res.status(200).json(users)
+    } catch (error) {
+      logger.error(JSON.stringify(error))
 
-    res.status(error.statusCode).json(error.output)
+      res.status(error.statusCode).json(error.output)
+    }
   }
 }
 
@@ -88,21 +92,25 @@ async function postUser (req, res) {
 }
 
 /**
- * Function to update a webapp in the database.
+ * Function to count user
  *
  * @param  {Object} req
  * @param  {Object} res
- * @returns {Promise(webapp)}
+ * @returns {String}
  */
 async function countUser (req, res) {
   try {
     logger.debug(`countUser`)
 
-    return []
-  } catch (error) {
-    logger.debug(error)
+    // TODO - auth middleware
 
-    throw new Error(error)
+    const countUser = await userModel.countUser()
+
+    res.status(200).json(countUser[0])
+  } catch (error) {
+    logger.error(JSON.stringify(error))
+
+    res.status(error.statusCode).json(error.output)
   }
 }
 
