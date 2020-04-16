@@ -56,7 +56,7 @@ exports.up = pgm => {
     CREATE TABLE challenge (
       id serial PRIMARY KEY,
       name varchar(255) NOT NULL,
-      description text NOT NULL,
+      description text,
       date_start timestamp NOT NULL,
       date_end timestamp NOT NULL,
       is_active boolean DEFAULT true,
@@ -66,7 +66,7 @@ exports.up = pgm => {
   pgm.createTable('challenge', {
     id: { primaryKey: true, type: 'serial' },
     name: { type: 'varchar(255)', notNull: true },
-    description: { type: 'text', notNull: true },
+    description: { type: 'text' },
     date_start: { type: 'timestamp', notNull: true },
     date_end: { type: 'timestamp', notNull: true },
     is_active: { type: 'boolean', DEFAULT: true },
