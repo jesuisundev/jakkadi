@@ -20,7 +20,8 @@ describe('Unit test - Controller - User', () => {
         createUser: sinon.stub().resolves(),
         getUser: sinon.stub().resolves(),
         deleteUser: sinon.stub().resolves(),
-        listUsers: sinon.stub().resolves()
+        listUsers: sinon.stub().resolves(),
+        countUser: sinon.stub().resolves([])
       }
 
       mockery.registerMock(path.resolve('src/models/user'), mockUserModel)
@@ -95,6 +96,18 @@ describe('Unit test - Controller - User', () => {
         expect(res.statusCode).to.equal(200)
       })
 
+      it('On success : count user should return 200', async () => {
+        initMocks()
+
+        const userController = require(path.resolve('src/controllers/user'))
+        const req = httpMocks.createRequest({ body: {}, query: { 'count': 1 } })
+        const res = httpMocks.createResponse()
+
+        await userController.listUsers(req, res)
+
+        expect(res.statusCode).to.equal(200)
+      })
+
       it('On error : should return 500', async () => {
         initMocks()
 
@@ -111,6 +124,31 @@ describe('Unit test - Controller - User', () => {
     })
 
     describe('GET count user', () => {
+      it('On success : should return 200', async () => {
+        initMocks()
+
+        const userController = require(path.resolve('src/controllers/user'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        await userController.countUser(req, res)
+
+        expect(res.statusCode).to.equal(200)
+      })
+
+      it('On error : should return 500', async () => {
+        initMocks()
+
+        mockUserModel.countUser = sinon.stub().rejects(common.buildError())
+
+        const userController = require(path.resolve('src/controllers/user'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        await userController.countUser(req, res)
+
+        expect(res.statusCode).to.equal(500)
+      })
     })
 
     describe('DELETE user', () => {
