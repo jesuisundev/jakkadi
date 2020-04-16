@@ -160,6 +160,35 @@ describe('Unit test - Model - User', () => {
     })
 
     describe('GET count user', () => {
+      it('On success : should return 200', async () => {
+        queryStub = sinon.stub().resolves({ rows: [] })
+        initMocks(queryStub)
+
+        const userModel = require(path.resolve('src/models/user'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        const users = await userModel.countUser(req, res)
+
+        expect(users).to.deep.equal([])
+      })
+
+      it('On error : should return 500', async () => {
+        queryStub = sinon.stub().rejects()
+        initMocks(queryStub)
+
+        const userModel = require(path.resolve('src/models/user'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        try {
+          await userModel.countUser(req, res)
+        } catch (err) {
+          expect(err.statusCode).to.equal(500)
+          expect(db.getInstance().query.calledOnce).to.equal(true)
+          expect(db.getInstance().query.calledTwice).to.equal(false)
+        }
+      })
     })
 
     describe('DELETE user', () => {

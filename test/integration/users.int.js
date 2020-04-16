@@ -19,6 +19,23 @@ describe('Integration test - User', () => {
   after(() => dbHelper.dbDown())
 
   describe('[SCENARIO] Test happy path cases', () => {
+    it('GET - Get count user should respond 200', async () => {
+      const options = generatePayload(
+        `/jakkadi/v1/user?count=1`,
+        'GET',
+        {},
+        { 'Content-Type': 'application/json' }
+      )
+      const prom = rp(options)
+
+      return prom.should.be.fulfilled
+        .then(res => {
+          expect(res.statusCode).to.equal(200)
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.deep.equal({ count: '0' })
+        })
+    })
+
     it('POST - Post user with good payload should respond 201', async () => {
       const currentPayload = _.cloneDeep(fixtures.post.input.valid)
       const options = generatePayload(
@@ -33,6 +50,23 @@ describe('Integration test - User', () => {
         .then(res => {
           expect(res.statusCode).to.equal(201)
           expect(res.body).to.be.an('object')
+        })
+    })
+
+    it('GET - Get count user should respond 200', async () => {
+      const options = generatePayload(
+        `/jakkadi/v1/user?count=1`,
+        'GET',
+        {},
+        { 'Content-Type': 'application/json' }
+      )
+      const prom = rp(options)
+
+      return prom.should.be.fulfilled
+        .then(res => {
+          expect(res.statusCode).to.equal(200)
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.deep.equal({ count: '1' })
         })
     })
 
