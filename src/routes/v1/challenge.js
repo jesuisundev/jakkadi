@@ -57,5 +57,12 @@ module.exports = [
       }
     },
     tags: ['challenge']
+  },
+  {
+    method: 'get',
+    url: '/current/challenge',
+    handler: require(path.join(controllersPath, 'challenge')).currentChallenge,
+    description: 'Get current challenge',
+    tags: ['challenge']
   }
 ]
