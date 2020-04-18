@@ -8,8 +8,8 @@ require(path.resolve('test/chai'))
 const common = require(path.resolve('src/modules/common'))
 const bootstrap = require(path.resolve('test/bootstrap'))
 
-describe('Unit test - Model - User', () => {
-  describe('POST user', () => {
+describe('Unit test - Model - Challenge', () => {
+  describe('POST challenge', () => {
     let mockDb = null
     let db = null
     let queryStub = null
@@ -29,64 +29,30 @@ describe('Unit test - Model - User', () => {
       db = mockDb
     }
 
-    describe('postUser', () => {
+    describe('postChallenge', () => {
       it('On success : should return 201', async () => {
         queryStub = sinon.stub().resolves({ rows: {} })
         initMocks(queryStub)
 
-        const userModel = require(path.resolve('src/models/user'))
+        const challengeModel = require(path.resolve('src/models/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
 
-        const rows = await userModel.createUser(req, res)
+        const rows = await challengeModel.createChallenge(req, res)
 
         expect(rows).to.deep.equal({})
-      })
-
-      it('On error : if already exist should return 409', async () => {
-        queryStub = sinon.stub().rejects({ code: '23505' })
-        initMocks(queryStub)
-
-        const userModel = require(path.resolve('src/models/user'))
-        const req = httpMocks.createRequest({ body: {} })
-        const res = httpMocks.createResponse()
-
-        try {
-          await userModel.createUser(req, res)
-        } catch (err) {
-          expect(err.statusCode).to.equal(409)
-          expect(db.getInstance().query.calledOnce).to.equal(true)
-          expect(db.getInstance().query.calledTwice).to.equal(false)
-        }
-      })
-
-      it('On error : if already exist should return 409 with different message', async () => {
-        queryStub = sinon.stub().rejects({ code: '23505', constraint: 'user_username_key' })
-        initMocks(queryStub)
-
-        const userModel = require(path.resolve('src/models/user'))
-        const req = httpMocks.createRequest({ body: {} })
-        const res = httpMocks.createResponse()
-
-        try {
-          await userModel.createUser(req, res)
-        } catch (err) {
-          expect(err.statusCode).to.equal(409)
-          expect(db.getInstance().query.calledOnce).to.equal(true)
-          expect(db.getInstance().query.calledTwice).to.equal(false)
-        }
       })
 
       it('On error : should return 500', async () => {
         queryStub = sinon.stub().rejects(common.buildError())
         initMocks(queryStub)
 
-        const userModel = require(path.resolve('src/models/user'))
+        const challengeModel = require(path.resolve('src/models/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
 
         try {
-          await userModel.createUser(req, res)
+          await challengeModel.createChallenge(req, res)
         } catch (err) {
           expect(err.statusCode).to.equal(500)
           expect(db.getInstance().query.calledOnce).to.equal(true)
@@ -95,30 +61,30 @@ describe('Unit test - Model - User', () => {
       })
     })
 
-    describe('GET user', () => {
+    describe('GET challenge', () => {
       it('On success : should return 200', async () => {
-        queryStub = sinon.stub().resolves({ rows: [{ username: 'superToto' }] })
+        queryStub = sinon.stub().resolves({ rows: [{ challengename: 'superToto' }] })
         initMocks(queryStub)
 
-        const userModel = require(path.resolve('src/models/user'))
+        const challengeModel = require(path.resolve('src/models/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
 
-        const user = await userModel.getUser(req, res)
+        const challenge = await challengeModel.getChallenge(req, res)
 
-        expect(user.username).to.equal('superToto')
+        expect(challenge.challengename).to.equal('superToto')
       })
 
-      it('On error : if no user should return 404', async () => {
+      it('On error : if no challenge should return 404', async () => {
         queryStub = sinon.stub().resolves({ rows: [] })
         initMocks(queryStub)
 
-        const userModel = require(path.resolve('src/models/user'))
+        const challengeModel = require(path.resolve('src/models/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
 
         try {
-          await userModel.getUser(req, res)
+          await challengeModel.getChallenge(req, res)
         } catch (err) {
           expect(err.statusCode).to.equal(404)
           expect(db.getInstance().query.calledOnce).to.equal(true)
@@ -130,12 +96,12 @@ describe('Unit test - Model - User', () => {
         queryStub = sinon.stub().rejects()
         initMocks(queryStub)
 
-        const userModel = require(path.resolve('src/models/user'))
+        const challengeModel = require(path.resolve('src/models/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
 
         try {
-          await userModel.getUser(req, res)
+          await challengeModel.getChallenge(req, res)
         } catch (err) {
           expect(err.statusCode).to.equal(500)
           expect(db.getInstance().query.calledOnce).to.equal(true)
@@ -144,30 +110,30 @@ describe('Unit test - Model - User', () => {
       })
     })
 
-    describe('GET list user', () => {
+    describe('GET list challenge', () => {
       it('On success : should return 200', async () => {
         queryStub = sinon.stub().resolves({ rows: [] })
         initMocks(queryStub)
 
-        const userModel = require(path.resolve('src/models/user'))
+        const challengeModel = require(path.resolve('src/models/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
 
-        const users = await userModel.listUsers(req, res)
+        const challenges = await challengeModel.listChallenges(req, res)
 
-        expect(users).to.deep.equal([])
+        expect(challenges).to.deep.equal([])
       })
 
       it('On error : should return 500', async () => {
         queryStub = sinon.stub().rejects()
         initMocks(queryStub)
 
-        const userModel = require(path.resolve('src/models/user'))
+        const challengeModel = require(path.resolve('src/models/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
 
         try {
-          await userModel.listUsers(req, res)
+          await challengeModel.listChallenges(req, res)
         } catch (err) {
           expect(err.statusCode).to.equal(500)
           expect(db.getInstance().query.calledOnce).to.equal(true)
@@ -176,30 +142,30 @@ describe('Unit test - Model - User', () => {
       })
     })
 
-    describe('GET count user', () => {
+    describe('GET count challenge', () => {
       it('On success : should return 200', async () => {
         queryStub = sinon.stub().resolves({ rows: [] })
         initMocks(queryStub)
 
-        const userModel = require(path.resolve('src/models/user'))
+        const challengeModel = require(path.resolve('src/models/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
 
-        const users = await userModel.countUser(req, res)
+        const challenges = await challengeModel.countChallenge(req, res)
 
-        expect(users).to.deep.equal([])
+        expect(challenges).to.deep.equal([])
       })
 
       it('On error : should return 500', async () => {
         queryStub = sinon.stub().rejects()
         initMocks(queryStub)
 
-        const userModel = require(path.resolve('src/models/user'))
+        const challengeModel = require(path.resolve('src/models/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
 
         try {
-          await userModel.countUser(req, res)
+          await challengeModel.countChallenge(req, res)
         } catch (err) {
           expect(err.statusCode).to.equal(500)
           expect(db.getInstance().query.calledOnce).to.equal(true)
@@ -208,30 +174,30 @@ describe('Unit test - Model - User', () => {
       })
     })
 
-    describe('DELETE user', () => {
+    describe('DELETE challenge', () => {
       it('On success : should return 204', async () => {
         queryStub = sinon.stub().resolves({ rowCount: 1 })
         initMocks(queryStub)
 
-        const userModel = require(path.resolve('src/models/user'))
+        const challengeModel = require(path.resolve('src/models/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
 
-        const rows = await userModel.deleteUser(req, res)
+        const rows = await challengeModel.deleteChallenge(req, res)
 
         expect(rows).to.deep.equal({})
       })
 
-      it('On error : if user not exist should return 404', async () => {
+      it('On error : if challenge not exist should return 404', async () => {
         queryStub = sinon.stub().resolves({ rowCount: 0 })
         initMocks(queryStub)
 
-        const userModel = require(path.resolve('src/models/user'))
+        const challengeModel = require(path.resolve('src/models/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
 
         try {
-          await userModel.deleteUser(req, res)
+          await challengeModel.deleteChallenge(req, res)
         } catch (err) {
           expect(err.statusCode).to.equal(404)
           expect(db.getInstance().query.calledOnce).to.equal(true)
@@ -243,12 +209,12 @@ describe('Unit test - Model - User', () => {
         queryStub = sinon.stub().rejects(common.buildError())
         initMocks(queryStub)
 
-        const userModel = require(path.resolve('src/models/user'))
+        const challengeModel = require(path.resolve('src/models/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
 
         try {
-          await userModel.deleteUser(req, res)
+          await challengeModel.deleteChallenge(req, res)
         } catch (err) {
           expect(err.statusCode).to.equal(500)
           expect(db.getInstance().query.calledOnce).to.equal(true)
