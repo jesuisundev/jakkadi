@@ -59,7 +59,6 @@ exports.up = pgm => {
       description text,
       date_start timestamp NOT NULL,
       date_end timestamp NOT NULL,
-      is_active boolean DEFAULT true,
       created_at timestamp DEFAULT CURRENT_TIMESTAMP
     );
   */
@@ -69,7 +68,6 @@ exports.up = pgm => {
     description: { type: 'text' },
     date_start: { type: 'timestamp', notNull: true },
     date_end: { type: 'timestamp', notNull: true },
-    is_active: { type: 'boolean', DEFAULT: true },
     created_at: { type: 'timestamp', DEFAULT: Date.now() }
   })
 }
