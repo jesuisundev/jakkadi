@@ -21,6 +21,7 @@ describe('Unit test - Controller - Challenge', () => {
         getChallenge: sinon.stub().resolves(),
         deleteChallenge: sinon.stub().resolves(),
         listChallenges: sinon.stub().resolves(),
+        getCurrentChallenge: sinon.stub().resolves(),
         countChallenge: sinon.stub().resolves([])
       }
 
@@ -78,6 +79,34 @@ describe('Unit test - Controller - Challenge', () => {
         const res = httpMocks.createResponse()
 
         await challengeController.getChallenge(req, res)
+
+        expect(res.statusCode).to.equal(500)
+      })
+    })
+
+    describe('GET challenge', () => {
+      it('On success : should return 200', async () => {
+        initMocks()
+
+        const challengeController = require(path.resolve('src/controllers/challenge'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        await challengeController.getCurrentChallenge(req, res)
+
+        expect(res.statusCode).to.equal(200)
+      })
+
+      it('On error : should return 500', async () => {
+        initMocks()
+
+        mockChallengeModel.getCurrentChallenge = sinon.stub().rejects(common.buildError())
+
+        const challengeController = require(path.resolve('src/controllers/challenge'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        await challengeController.getCurrentChallenge(req, res)
 
         expect(res.statusCode).to.equal(500)
       })

@@ -118,6 +118,54 @@ describe('Integration test - Challenge', () => {
         })
     })
 
+    it('GET - Get current challenge with good payload should respond 404', () => {
+      const options = generatePayload(
+        `/jakkadi/v1/current/challenge/`,
+        'GET',
+        {},
+        { 'Content-Type': 'application/json' }
+      )
+      const prom = rp(options)
+
+      return prom.should.be.rejected
+        .then(res => {
+          expect(res.statusCode).to.equal(404)
+        })
+    })
+
+    it('POST - Post current challenge with good payload should respond 201', () => {
+      const currentPayload = _.cloneDeep(fixtures.post.input.valid)
+      currentPayload.date_end = new Date(Date.now() + 1 * 24 * 3600 * 1000)
+      const options = generatePayload(
+        `/jakkadi/v1/challenge`,
+        'POST',
+        currentPayload,
+        { 'Content-Type': 'application/json' }
+      )
+      const prom = rp(options)
+
+      return prom.should.be.fulfilled
+        .then(res => {
+          expect(res.statusCode).to.equal(201)
+        })
+    })
+
+    it('GET - Get current challenge with good payload should respond 200', () => {
+      const options = generatePayload(
+        `/jakkadi/v1/current/challenge/`,
+        'GET',
+        {},
+        { 'Content-Type': 'application/json' }
+      )
+      const prom = rp(options)
+
+      return prom.should.be.fulfilled
+        .then(res => {
+          expect(res.statusCode).to.equal(200)
+          expect(res.body).to.be.an('object')
+        })
+    })
+
     it('DELETE - delete same challenge should respond 204', async () => {
       const options = generatePayload(
         `/jakkadi/v1/challenge/1`,

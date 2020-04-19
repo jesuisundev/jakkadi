@@ -110,6 +110,55 @@ describe('Unit test - Model - Challenge', () => {
       })
     })
 
+    describe('GET current challenge', () => {
+      it('On success : should return 200', async () => {
+        queryStub = sinon.stub().resolves({ rows: [{ challengename: 'superToto' }] })
+        initMocks(queryStub)
+
+        const challengeModel = require(path.resolve('src/models/challenge'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        const challenge = await challengeModel.getCurrentChallenge(req, res)
+
+        expect(challenge.challengename).to.equal('superToto')
+      })
+
+      it('On error : if no challenge should return 404', async () => {
+        queryStub = sinon.stub().resolves({ rows: [] })
+        initMocks(queryStub)
+
+        const challengeModel = require(path.resolve('src/models/challenge'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        try {
+          await challengeModel.getCurrentChallenge(req, res)
+        } catch (err) {
+          expect(err.statusCode).to.equal(404)
+          expect(db.getInstance().query.calledOnce).to.equal(true)
+          expect(db.getInstance().query.calledTwice).to.equal(false)
+        }
+      })
+
+      it('On error : should return 500', async () => {
+        queryStub = sinon.stub().rejects()
+        initMocks(queryStub)
+
+        const challengeModel = require(path.resolve('src/models/challenge'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        try {
+          await challengeModel.getCurrentChallenge(req, res)
+        } catch (err) {
+          expect(err.statusCode).to.equal(500)
+          expect(db.getInstance().query.calledOnce).to.equal(true)
+          expect(db.getInstance().query.calledTwice).to.equal(false)
+        }
+      })
+    })
+
     describe('GET list challenge', () => {
       it('On success : should return 200', async () => {
         queryStub = sinon.stub().resolves({ rows: [] })
