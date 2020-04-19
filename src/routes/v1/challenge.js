@@ -61,7 +61,7 @@ module.exports = [
   {
     method: 'get',
     url: '/current/challenge',
-    handler: require(path.join(controllersPath, 'challenge')).currentChallenge,
+    handler: require(path.join(controllersPath, 'challenge')).getCurrentChallenge,
     description: 'Get current challenge',
     tags: ['challenge']
   }

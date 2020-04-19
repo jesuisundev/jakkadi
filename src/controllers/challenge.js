@@ -78,6 +78,26 @@ async function getChallenge (req, res) {
  * @param {Object} req express request object
  * @param {Object} res express response object
  */
+async function getCurrentChallenge (req, res) {
+  try {
+    logger.debug(`getCurrentChallenge - controller`)
+
+    // TODO - cache
+
+    const challenge = await challengeModel.getCurrentChallenge()
+
+    res.status(200).json(challenge)
+  } catch (error) {
+    logger.error(JSON.stringify(error))
+
+    res.status(error.statusCode).json(error.output)
+  }
+}
+
+/**
+ * @param {Object} req express request object
+ * @param {Object} res express response object
+ */
 async function deleteChallenge (req, res) {
   try {
     logger.debug(`deleteChallenge`)
@@ -114,11 +134,11 @@ async function postChallenge (req, res) {
   }
 }
 
-
 module.exports = {
   postChallenge,
   listChallenges,
   deleteChallenge,
   getChallenge,
+  getCurrentChallenge,
   countChallenge
 }

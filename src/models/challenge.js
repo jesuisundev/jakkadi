@@ -18,7 +18,7 @@ async function createChallenge (challenge) {
     logger.debug(`[createChallenge - name: ${challenge.name}]`)
 
     const createChallengeSqlQuery = _createChallengeBuildSql(challenge)
-    
+
     const { rows } = await db.getInstance().query(
       createChallengeSqlQuery.dbQuery,
       createChallengeSqlQuery.dbQueryValues
@@ -30,7 +30,7 @@ async function createChallenge (challenge) {
   } catch (error) {
     logger.debug(`[createChallenge - : ${challenge.name} - failed]`)
     logger.error(JSON.stringify(error))
-  
+
     throw common.buildError(500)
   }
 }
@@ -96,6 +96,56 @@ async function getChallenge (idChallenge) {
 function _getChallengeBuildSql (idChallenge) {
   const dbQuery = `SELECT id, name, description, date_start, date_end, created_at FROM "challenge" WHERE "id" = $1;`
   const dbQueryValues = [ idChallenge ]
+
+  return { dbQuery, dbQueryValues }
+}
+
+/**
+ * Get the current challenge
+ *
+ * @async
+ * @returns {Promise}
+ */
+async function getCurrentChallenge () {
+  try {
+    logger.debug(`[getCurrentChallenge - model]`)
+
+    const getCurrentChallengeSqlQuery = _getCurrentChallengeBuildSql()
+
+    const { rows } = await db.getInstance().query(
+      getCurrentChallengeSqlQuery.dbQuery,
+      getCurrentChallengeSqlQuery.dbQueryValues
+    )
+
+    if (!rows.length) {
+      const message = `Current challenge does not exist`
+
+      return Promise.reject(common.buildError(404, message))
+    }
+
+    logger.debug(`[getCurrentChallenge - models - success]`)
+
+    return rows[0]
+  } catch (error) {
+    logger.error(JSON.stringify(error))
+
+    throw common.buildError(500)
+  }
+}
+
+/**
+ * Create the SQL to get a user
+ *
+ * @param {String} idChallenge user id
+ * @returns {Object}
+ */
+function _getCurrentChallengeBuildSql () {
+  const dbQuery = `SELECT id, name, description, date_start, date_end, created_at 
+                   FROM "challenge" 
+                   WHERE "date_start" <= now()
+                   AND "date_end" >= now();`
+
+  const dbQueryValues = []
 
   return { dbQuery, dbQueryValues }
 }
@@ -235,6 +285,7 @@ function _getCountChallengesBuildSql () {
 module.exports = {
   createChallenge,
   getChallenge,
+  getCurrentChallenge,
   listChallenges,
   countChallenge,
   deleteChallenge

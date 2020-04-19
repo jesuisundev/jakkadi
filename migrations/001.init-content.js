@@ -15,7 +15,7 @@ exports.up = pgm => {
     email: { type: 'varchar(255)', notNull: true, unique: true },
     password: { type: 'varchar(255)', notNull: true },
     id_photo: { type: 'serial', DEFAULT: null },
-    created_at: { type: 'timestamp', DEFAULT: Date.now() }
+    created_at: { type: 'timestamp', DEFAULT: pgm.func('NOW()') }
   })
 
   /**
@@ -34,7 +34,7 @@ exports.up = pgm => {
     id_challenge: { primaryKey: true, type: 'serial' },
     description: { type: 'text' },
     path: { type: 'text', notNull: true },
-    created_at: { type: 'timestamp', DEFAULT: Date.now() }
+    created_at: { type: 'timestamp', DEFAULT: pgm.func('NOW()') }
   })
 
   /**
@@ -49,7 +49,7 @@ exports.up = pgm => {
     id: { primaryKey: true, type: 'serial' },
     id_user: { primaryKey: true, type: 'serial', notNull: true },
     id_challenge: { primaryKey: true, type: 'serial' },
-    created_at: { type: 'timestamp', DEFAULT: Date.now() }
+    created_at: { type: 'timestamp', DEFAULT: pgm.func('NOW()') }
   })
 
   /**
@@ -59,7 +59,7 @@ exports.up = pgm => {
       description text,
       date_start timestamp NOT NULL,
       date_end timestamp NOT NULL,
-      created_at timestamp DEFAULT CURRENT_TIMESTAMP
+      created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
   */
   pgm.createTable('challenge', {
@@ -68,8 +68,13 @@ exports.up = pgm => {
     description: { type: 'text' },
     date_start: { type: 'timestamp', notNull: true },
     date_end: { type: 'timestamp', notNull: true },
-    created_at: { type: 'timestamp', DEFAULT: Date.now() }
+    created_at: { type: 'timestamp', DEFAULT: pgm.func('NOW()') }
   })
+
+  /**
+    CREATE INDEX challenge ON tbl(start_date, end_date);
+  */
+  pgm.createIndex('challenge', ['date_start', 'date_end'])
 }
 
 exports.down = pgm => {
