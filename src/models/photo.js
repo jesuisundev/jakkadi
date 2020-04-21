@@ -33,9 +33,7 @@ async function createPhoto (photo, path) {
 
     // postgres unique violation
     if (error.code === '23505') {
-      const message = error.constraint === 'photo_photoname_key'
-        ? `Photoname ${photo.photoname} already exists.`
-        : `Email ${photo.email} already exists.`
+      const message = `Photo already exist.`
 
       throw common.buildError(409, message)
     }

@@ -1,0 +1,11 @@
+{
+  "post": {
+    "input": {
+      "valid" : {
+        "id_user": 1,
+        "id_challenge": 1,
+        "description": "test"
+      }
+    }
+  }
+}

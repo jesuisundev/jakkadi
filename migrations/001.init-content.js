@@ -26,6 +26,7 @@ exports.up = pgm => {
       description text,
       path text NOT NULL,
       created_at timestamp DEFAULT CURRENT_TIMESTAMP
+      CONSTRAINT "photo_uniq_id_user_id_challenge" UNIQUE ("id_user", "id_challenge")
     );
   */
   pgm.createTable('photo', {
@@ -35,6 +36,10 @@ exports.up = pgm => {
     description: { type: 'text' },
     path: { type: 'text', notNull: true },
     created_at: { type: 'timestamp', DEFAULT: pgm.func('NOW()') }
+  }, {
+    constraints: {
+      unique: ['id_user', 'id_challenge']
+    }
   })
 
   /**
