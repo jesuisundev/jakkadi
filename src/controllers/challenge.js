@@ -74,6 +74,22 @@ async function getChallenge (req, res) {
   }
 }
 
+async function getPhotosByChallenge (req, res) {
+  try {
+    logger.debug(`getPhotosByChallenge`)
+
+    // TODO - auth middleware
+
+    const challenge = await challengeModel.getPhotosByChallenge(req.params.id_challenge)
+
+    res.status(200).json(challenge)
+  } catch (error) {
+    logger.error(JSON.stringify(error))
+
+    res.status(error.statusCode).json(error.output)
+  }
+}
+
 /**
  * @param {Object} req express request object
  * @param {Object} res express response object
@@ -140,5 +156,6 @@ module.exports = {
   deleteChallenge,
   getChallenge,
   getCurrentChallenge,
+  getPhotosByChallenge,
   countChallenge
 }

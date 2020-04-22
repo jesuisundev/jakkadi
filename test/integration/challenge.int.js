@@ -166,6 +166,22 @@ describe('Integration test - Challenge', () => {
         })
     })
 
+    it('GET - Get photo by challenge with good payload should respond 200', () => {
+      const options = generatePayload(
+        `/jakkadi/v1/challenge/1/photo/`,
+        'GET',
+        {},
+        { 'Content-Type': 'application/json' }
+      )
+      const prom = rp(options)
+
+      return prom.should.be.fulfilled
+        .then(res => {
+          expect(res.statusCode).to.equal(200)
+          expect(res.body).to.be.an('array')
+        })
+    })
+
     it('DELETE - delete same challenge should respond 204', async () => {
       const options = generatePayload(
         `/jakkadi/v1/challenge/1`,

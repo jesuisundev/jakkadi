@@ -32,6 +32,18 @@ module.exports = [
     tags: ['challenge']
   },
   {
+    method: 'get',
+    url: '/challenge/:id_challenge/photo',
+    description: 'Get list of photo by challenge',
+    handler: require(path.join(controllersPath, 'challenge')).getPhotosByChallenge,
+    validate: {
+      params: {
+        id_challenge: Joi.number().required().description('Specify the id of the challenge').example('1')
+      }
+    },
+    tags: ['challenge']
+  },
+  {
     method: 'post',
     url: '/challenge/',
     handler: require(path.join(controllersPath, 'challenge')).postChallenge,

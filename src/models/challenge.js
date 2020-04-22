@@ -151,7 +151,7 @@ function _getCurrentChallengeBuildSql () {
 }
 
 /**
- * Get a user list from the query object provided
+ * Get a challenge list from the query object provided
  *
  * @async
  * @param {Object} query from the controller
@@ -179,6 +179,53 @@ async function listChallenges (query) {
     throw common.buildError(500)
   }
 }
+
+/**
+ * Get a photo list by challenge from the query object provided
+ *
+ * @async
+ * @param {string} idChallenge from the controller
+ * @returns {Promise}
+ */
+async function getPhotosByChallenge (idChallenge) {
+  try {
+    logger.debug(`[getPhotosByChallenge]`)
+
+    // TODO - handle pagination with query (offset, limit)
+
+    const getPhotoListChallengesSqlQuery = _getListPhotosByChallengeBuildSql(idChallenge)
+
+    const { rows } = await db.getInstance().query(
+      getPhotoListChallengesSqlQuery.dbQuery,
+      getPhotoListChallengesSqlQuery.dbQueryValues
+    )
+
+    logger.debug(`[getPhotosByChallenge - success]`)
+
+    return rows
+  } catch (error) {
+    logger.error(JSON.stringify(error))
+
+    throw common.buildError(500)
+  }
+}
+
+/**
+ * Create the SQL to get a photo list by challenge
+ *
+ * @param {String} options
+ * @returns {Object}
+ */
+function _getListPhotosByChallengeBuildSql (idChallenge) {
+  const dbQuery = `SELECT id, id_user, id_challenge, description, path, created_at 
+                  FROM "photo" 
+                  WHERE "id_challenge" = $1
+                  LIMIT 100;`
+  const dbQueryValues = [ idChallenge ]
+
+  return { dbQuery, dbQueryValues }
+}
+
 
 /**
  * Create the SQL to get a users list
@@ -286,6 +333,7 @@ module.exports = {
   createChallenge,
   getChallenge,
   getCurrentChallenge,
+  getPhotosByChallenge,
   listChallenges,
   countChallenge,
   deleteChallenge

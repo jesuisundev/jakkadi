@@ -271,5 +271,37 @@ describe('Unit test - Model - Challenge', () => {
         }
       })
     })
+
+    describe('GET list photo by challenge', () => {
+      it('On success : should return 200', async () => {
+        queryStub = sinon.stub().resolves({ rows: [] })
+        initMocks(queryStub)
+
+        const challengeModel = require(path.resolve('src/models/challenge'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        const challenges = await challengeModel.getPhotosByChallenge(req, res)
+
+        expect(challenges).to.deep.equal([])
+      })
+
+      it('On error : should return 500', async () => {
+        queryStub = sinon.stub().rejects()
+        initMocks(queryStub)
+
+        const challengeModel = require(path.resolve('src/models/challenge'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+
+        try {
+          await challengeModel.getPhotosByChallenge(req, res)
+        } catch (err) {
+          expect(err.statusCode).to.equal(500)
+          expect(db.getInstance().query.calledOnce).to.equal(true)
+          expect(db.getInstance().query.calledTwice).to.equal(false)
+        }
+      })
+    })
   })
 })
