@@ -46,15 +46,20 @@ exports.up = pgm => {
     CREATE TABLE like (
       id serial PRIMARY KEY,
       id_user serial NOT NULL,
-      id_challenge serial,
+      id_photo serial,
       created_at timestamp DEFAULT CURRENT_TIMESTAMP
+      CONSTRAINT "like_uniq_id_user_id_photo" UNIQUE ("id_user", "id_photo")
     );
   */
   pgm.createTable('like', {
     id: { primaryKey: true, type: 'serial' },
     id_user: { primaryKey: true, type: 'serial', notNull: true },
-    id_challenge: { primaryKey: true, type: 'serial' },
+    id_photo: { primaryKey: true, type: 'serial' },
     created_at: { type: 'timestamp', DEFAULT: pgm.func('NOW()') }
+  }, {
+    constraints: {
+      unique: ['id_user', 'id_photo']
+    }
   })
 
   /**
