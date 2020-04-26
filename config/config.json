@@ -2,9 +2,6 @@
   "prefix": "jakkadi",
   "port": 8080,
   "basePath": "jakkadi",
-  "HZFLAGS": {
-    "VALIDATEREADPERMISSION": false
-  },
   "postgres": {
     "host": "postgres",
     "port": 5432,
@@ -12,35 +9,9 @@
     "user": "jakkadi",
     "password": "jakkadi"
   },
-  "build": {
-    "orderby": [
-      "name",
-      "name.asc",
-      "name.desc",
-      "id",
-      "id.asc",
-      "id.desc",
-      "created_at",
-      "created_at.asc",
-      "created_at.desc"
-    ]
-  },
   "cache": {
-    "redis": {
-      "host": "redis",
-      "port": 6379,
-      "user": "redis",
-      "password": "fake-password",
-      "total_retry": 5,
-      "total_retry_time": 60000,
-      "ttl": 3
-    },
-    "redlock": {
-      "driftFactor": 0.01,
-      "retryCount": 10,
-      "retryDelay": 200,
-      "retryJitter": 200,
-      "defaultTTL": 60
+    "internal": {
+      "checkperiod": 0
     }
   },
   "logger": {

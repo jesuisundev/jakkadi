@@ -47,6 +47,7 @@
     "lodash": "^4.17.15",
     "lout4express": "^1.2.5",
     "morgan": "^1.9.0",
+    "node-cache": "^5.1.0",
     "node-pg-migrate": "^3.21.1",
     "pg": "^8.0.0",
     "route4express": "^2.1.1",
