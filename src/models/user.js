@@ -210,8 +210,6 @@ async function countUser () {
   try {
     logger.debug(`[countUser]`)
 
-    // TODO - node-cache
-
     const getCountUsersSqlQuery = _getCountUsersBuildSql()
 
     const { rows } = await db.getInstance().query(

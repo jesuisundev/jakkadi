@@ -161,8 +161,6 @@ async function countLike () {
   try {
     logger.debug(`[countLike]`)
 
-    // TODO - node-cache
-
     const getCountLikesSqlQuery = _getCountLikesBuildSql()
 
     const { rows } = await db.getInstance().query(

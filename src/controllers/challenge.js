@@ -5,6 +5,7 @@ const path = require('path')
 const config = require(path.resolve('config/config.json'))
 const logger = require(path.resolve('src/modules/logger')).generate(config, module.filename)
 const challengeModel = require(path.resolve('src/models/challenge'))
+const common = require(path.resolve('src/modules/common'))
 
 /**
  *
@@ -80,7 +81,15 @@ async function getPhotosByChallenge (req, res) {
 
     // TODO - auth middleware
 
-    const challenge = await challengeModel.getPhotosByChallenge(req.params.id_challenge)
+    let challenge
+    const cachedPhotosByChallenge = await common.getAsyncCache(`challenge:photos:${req.params.id_challenge}`)
+
+    if (cachedPhotosByChallenge) {
+      challenge = cachedPhotosByChallenge
+    } else {
+      challenge = await challengeModel.getPhotosByChallenge(req.params.id_challenge)
+      await common.setAsyncCache(`challenge:photos:${req.params.id_challenge}`, challenge)
+    }
 
     res.status(200).json(challenge)
   } catch (error) {
@@ -98,9 +107,16 @@ async function getCurrentChallenge (req, res) {
   try {
     logger.debug(`getCurrentChallenge - controller`)
 
-    // TODO - cache
+    let challenge = {}
 
-    const challenge = await challengeModel.getCurrentChallenge()
+    const cachedCurrentChallenge = await common.getAsyncCache(`challenge:current`)
+
+    if (cachedCurrentChallenge) {
+      challenge = cachedCurrentChallenge
+    } else {
+      challenge = await challengeModel.getCurrentChallenge()
+      await common.setAsyncCache(`challenge:current`, challenge)
+    }
 
     res.status(200).json(challenge)
   } catch (error) {
@@ -141,6 +157,7 @@ async function postChallenge (req, res) {
     // TODO - auth middleware
 
     await challengeModel.createChallenge(req.body)
+    await common.delAsyncCache([`challenge:current`])
 
     res.status(201).json({})
   } catch (error) {

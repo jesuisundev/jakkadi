@@ -297,8 +297,6 @@ async function countChallenge () {
   try {
     logger.debug(`[countChallenge]`)
 
-    // TODO - node-cache
-
     const getCountChallengesSqlQuery = _getCountChallengesBuildSql()
 
     const { rows } = await db.getInstance().query(

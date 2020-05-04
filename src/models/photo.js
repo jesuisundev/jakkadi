@@ -211,8 +211,6 @@ async function countPhoto () {
   try {
     logger.debug(`[countPhoto]`)
 
-    // TODO - node-cache
-
     const getCountPhotosSqlQuery = _getCountPhotosBuildSql()
 
     const { rows } = await db.getInstance().query(

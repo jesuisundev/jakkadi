@@ -5,6 +5,7 @@ const path = require('path')
 const config = require(path.resolve('config/config.json'))
 const logger = require(path.resolve('src/modules/logger')).generate(config, module.filename)
 const likeModel = require(path.resolve('src/models/like'))
+const common = require(path.resolve('src/modules/common'))
 
 /**
  * Function to count like
@@ -55,9 +56,17 @@ async function getLikesByPhoto (req, res) {
 
     // TODO - auth middleware
 
-    const like = await likeModel.getLikesByPhoto(req.params.id_photo)
+    let likes
+    const cachedLikesByPhoto = await common.getAsyncCache(`likes:photos:${req.params.id_photo}`)
 
-    res.status(200).json(like)
+    if (cachedLikesByPhoto) {
+      likes = cachedLikesByPhoto
+    } else {
+      likes = await await likeModel.getLikesByPhoto(req.params.id_photo)
+      await common.setAsyncCache(`likes:photos:${req.params.id_photo}`, likes)
+    }
+
+    res.status(200).json(likes)
   } catch (error) {
     logger.error(JSON.stringify(error))
 
@@ -96,6 +105,7 @@ async function postLike (req, res) {
     // TODO - auth middleware
 
     await likeModel.createLike(req.body)
+    await common.delAsyncCache([`likes:photos:${req.body.id_photo}`])
 
     res.status(201).json({})
   } catch (error) {
