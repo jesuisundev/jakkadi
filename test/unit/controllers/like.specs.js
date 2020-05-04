@@ -11,6 +11,7 @@ const bootstrap = require(path.resolve('test/bootstrap'))
 describe('Unit test - Controller - Like', () => {
   describe('POST like', () => {
     let mockLikeModel = null
+    let mockCommonModules = null
 
     beforeEach(() => bootstrap.tearUp())
     afterEach(() => bootstrap.tearDown())
@@ -24,7 +25,14 @@ describe('Unit test - Controller - Like', () => {
         countLike: sinon.stub().resolves([])
       }
 
+      mockCommonModules = {
+        getAsyncCache: sinon.stub().resolves(),
+        setAsyncCache: sinon.stub().resolves(),
+        delAsyncCache: sinon.stub().resolves()
+      }
+
       mockery.registerMock(path.resolve('src/models/like'), mockLikeModel)
+      mockery.registerMock(path.resolve('src/modules/common'), mockCommonModules)
     }
 
     describe('postLike', () => {
@@ -90,6 +98,19 @@ describe('Unit test - Controller - Like', () => {
         const likeController = require(path.resolve('src/controllers/like'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
+
+        await likeController.getLikesByPhoto(req, res)
+
+        expect(res.statusCode).to.equal(200)
+      })
+
+      it('On success : should return 200 if cache is present', async () => {
+        initMocks()
+
+        const likeController = require(path.resolve('src/controllers/like'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+        mockCommonModules.getAsyncCache = sinon.stub().resolves({})
 
         await likeController.getLikesByPhoto(req, res)
 

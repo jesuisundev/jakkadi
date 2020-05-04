@@ -11,6 +11,7 @@ const bootstrap = require(path.resolve('test/bootstrap'))
 describe('Unit test - Controller - Challenge', () => {
   describe('POST challenge', () => {
     let mockChallengeModel = null
+    let mockCommonModules = null
 
     beforeEach(() => bootstrap.tearUp())
     afterEach(() => bootstrap.tearDown())
@@ -26,7 +27,14 @@ describe('Unit test - Controller - Challenge', () => {
         getPhotosByChallenge: sinon.stub().resolves([])
       }
 
+      mockCommonModules = {
+        getAsyncCache: sinon.stub().resolves(),
+        setAsyncCache: sinon.stub().resolves(),
+        delAsyncCache: sinon.stub().resolves()
+      }
+
       mockery.registerMock(path.resolve('src/models/challenge'), mockChallengeModel)
+      mockery.registerMock(path.resolve('src/modules/common'), mockCommonModules)
     }
 
     describe('postChallenge', () => {
@@ -92,6 +100,19 @@ describe('Unit test - Controller - Challenge', () => {
         const challengeController = require(path.resolve('src/controllers/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
+
+        await challengeController.getCurrentChallenge(req, res)
+
+        expect(res.statusCode).to.equal(200)
+      })
+
+      it('On success : should return 200 if cache is present', async () => {
+        initMocks()
+
+        const challengeController = require(path.resolve('src/controllers/challenge'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+        mockCommonModules.getAsyncCache = sinon.stub().resolves({})
 
         await challengeController.getCurrentChallenge(req, res)
 
@@ -216,6 +237,19 @@ describe('Unit test - Controller - Challenge', () => {
         const challengeController = require(path.resolve('src/controllers/challenge'))
         const req = httpMocks.createRequest({ body: {} })
         const res = httpMocks.createResponse()
+
+        await challengeController.getPhotosByChallenge(req, res)
+
+        expect(res.statusCode).to.equal(200)
+      })
+
+      it('On success : should return 200 if cache is present', async () => {
+        initMocks()
+
+        const challengeController = require(path.resolve('src/controllers/challenge'))
+        const req = httpMocks.createRequest({ body: {} })
+        const res = httpMocks.createResponse()
+        mockCommonModules.getAsyncCache = sinon.stub().resolves({})
 
         await challengeController.getPhotosByChallenge(req, res)
 
