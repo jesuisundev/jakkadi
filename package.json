@@ -44,7 +44,7 @@
     "express": "^4.16.3",
     "joi": "^14.3.1",
     "joi4express": "^1.2.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "lout4express": "^1.2.5",
     "morgan": "^1.9.0",
     "node-cache": "^4.2.0",
