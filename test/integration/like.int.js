@@ -22,7 +22,7 @@ describe('Integration test - Like', () => {
     it('POST - Post like with good payload should respond 201', async () => {
       const currentPayload = _.cloneDeep(fixtures.post.input.valid)
       const options = generatePayload(
-        `/jakkadi/v1/like`,
+        '/jakkadi/v1/like',
         'POST',
         currentPayload,
         { 'Content-Type': 'application/json' }
@@ -38,7 +38,7 @@ describe('Integration test - Like', () => {
 
     it('GET - Get like with good payload should respond 200', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/like/1`,
+        '/jakkadi/v1/like/1',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -55,7 +55,7 @@ describe('Integration test - Like', () => {
     it('POST - Post same like should respond 409', async () => {
       const currentPayload = _.cloneDeep(fixtures.post.input.valid)
       const options = generatePayload(
-        `/jakkadi/v1/like`,
+        '/jakkadi/v1/like',
         'POST',
         currentPayload,
         { 'Content-Type': 'application/json' }
@@ -71,7 +71,7 @@ describe('Integration test - Like', () => {
     it('POST - Post like with bad payload should respond 400', () => {
       const currentPayload = {}
       const options = generatePayload(
-        `/jakkadi/v1/like`,
+        '/jakkadi/v1/like',
         'POST',
         currentPayload,
         { 'Content-Type': 'application/json' }
@@ -86,7 +86,7 @@ describe('Integration test - Like', () => {
 
     it('DELETE - delete same like should respond 204', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/like/1`,
+        '/jakkadi/v1/like/1',
         'DELETE',
         {},
         { 'Content-Type': 'application/json' }
@@ -101,7 +101,7 @@ describe('Integration test - Like', () => {
 
     it('DELETE - delete same like again should respond 404', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/like/1`,
+        '/jakkadi/v1/like/1',
         'DELETE',
         {},
         { 'Content-Type': 'application/json' }

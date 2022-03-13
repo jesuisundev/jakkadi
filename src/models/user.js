@@ -15,28 +15,17 @@ const common = require(path.resolve('src/modules/common'))
  */
 async function createUser (user) {
   try {
-    logger.debug(`[createUser - username: ${user.username}]`)
-
     const createUserSqlQuery = _createUserBuildSql(user)
-
     const { rows } = await db.getInstance().query(
       createUserSqlQuery.dbQuery,
       createUserSqlQuery.dbQueryValues
     )
 
-    logger.debug(`[createUser - : ${user.username} - success]`)
-
     return rows
   } catch (error) {
-    logger.debug(`[createUser - : ${user.username} - failed]`)
-
-    // postgres unique violation
+    // postgres unique violation code
     if (error.code === '23505') {
-      const message = error.constraint === 'user_username_key'
-        ? `Username ${user.username} already exists.`
-        : `Email ${user.email} already exists.`
-
-      throw common.buildError(409, message)
+      throw common.buildError(409, 'Email and/or username already exists.')
     }
 
     throw common.buildError(500)
@@ -50,7 +39,7 @@ async function createUser (user) {
  * @returns {Object}
  */
 function _createUserBuildSql (user) {
-  const dbQuery = `INSERT INTO "user" (username, email, password) VALUES ($1, $2, $3);`
+  const dbQuery = 'INSERT INTO "user" (username, email, password) VALUES ($1, $2, $3);'
 
   // TODO - encode password
 
@@ -72,22 +61,15 @@ function _createUserBuildSql (user) {
  */
 async function getUser (idUser) {
   try {
-    logger.debug(`[getUser - user id: ${idUser}]`)
-
     const getUserSqlQuery = _getUserBuildSql(idUser)
-
     const { rows } = await db.getInstance().query(
       getUserSqlQuery.dbQuery,
       getUserSqlQuery.dbQueryValues
     )
 
     if (!rows.length) {
-      const message = `User does not exist`
-
-      return Promise.reject(common.buildError(404, message))
+      return Promise.reject(common.buildError(404, 'User does not exist'))
     }
-
-    logger.debug(`[getUser - : ${idUser} - success]`)
 
     return rows[0]
   } catch (error) {
@@ -104,8 +86,8 @@ async function getUser (idUser) {
  * @returns {Object}
  */
 function _getUserBuildSql (idUser) {
-  const dbQuery = `SELECT id, username, email, id_photo, created_at FROM "user" WHERE "id" = $1;`
-  const dbQueryValues = [ idUser ]
+  const dbQuery = 'SELECT id, username, email, id_photo, created_at FROM "user" WHERE "id" = $1;'
+  const dbQueryValues = [idUser]
 
   return { dbQuery, dbQueryValues }
 }
@@ -119,18 +101,12 @@ function _getUserBuildSql (idUser) {
  */
 async function listUsers (query) {
   try {
-    logger.debug(`[listUsers]`)
-
     // TODO - handle pagination with query (offset, limit)
-
     const getListUsersSqlQuery = _getListUsersBuildSql(query)
-
     const { rows } = await db.getInstance().query(
       getListUsersSqlQuery.dbQuery,
       getListUsersSqlQuery.dbQueryValues
     )
-
-    logger.debug(`[listUsers - success]`)
 
     return rows
   } catch (error) {
@@ -147,7 +123,7 @@ async function listUsers (query) {
  * @returns {Object}
  */
 function _getListUsersBuildSql (options) {
-  const dbQuery = `SELECT id, username, email, id_photo, created_at FROM "user" LIMIT 100;`
+  const dbQuery = 'SELECT id, username, email, id_photo, created_at FROM "user" LIMIT 100;'
   const dbQueryValues = []
 
   return { dbQuery, dbQueryValues }
@@ -162,22 +138,15 @@ function _getListUsersBuildSql (options) {
  */
 async function deleteUser (idUser) {
   try {
-    logger.debug(`[deleteUser - user id: ${idUser}]`)
-
     const deleteUserSqlQuery = _deleteUserBuildSql(idUser)
-
     const result = await db.getInstance().query(
       deleteUserSqlQuery.dbQuery,
       deleteUserSqlQuery.dbQueryValues
     )
 
     if (!result.rowCount) {
-      const message = `User does not exist`
-
-      return Promise.reject(common.buildError(404, message))
+      return Promise.reject(common.buildError(404, 'User does not exist'))
     }
-
-    logger.debug(`[deleteUser - : ${idUser} - success]`)
 
     return {}
   } catch (error) {
@@ -194,8 +163,8 @@ async function deleteUser (idUser) {
  * @returns {Object}
  */
 function _deleteUserBuildSql (idUser) {
-  const dbQuery = `DELETE FROM "user" WHERE "id" = $1;`
-  const dbQueryValues = [ idUser ]
+  const dbQuery = 'DELETE FROM "user" WHERE "id" = $1;'
+  const dbQueryValues = [idUser]
 
   return { dbQuery, dbQueryValues }
 }
@@ -208,16 +177,11 @@ function _deleteUserBuildSql (idUser) {
  */
 async function countUser () {
   try {
-    logger.debug(`[countUser]`)
-
     const getCountUsersSqlQuery = _getCountUsersBuildSql()
-
     const { rows } = await db.getInstance().query(
       getCountUsersSqlQuery.dbQuery,
       getCountUsersSqlQuery.dbQueryValues
     )
-
-    logger.debug(`[countUser - success]`)
 
     return rows
   } catch (error) {
@@ -234,7 +198,7 @@ async function countUser () {
  * @returns {Object}
  */
 function _getCountUsersBuildSql () {
-  const dbQuery = `SELECT count(*) FROM "user";`
+  const dbQuery = 'SELECT count(*) FROM "user";'
   const dbQueryValues = []
 
   return { dbQuery, dbQueryValues }

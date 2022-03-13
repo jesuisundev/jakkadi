@@ -16,26 +16,17 @@ const common = require(path.resolve('src/modules/common'))
  */
 async function createPhoto (photo, path) {
   try {
-    logger.debug(`[createPhoto - model - ${photo.id}]`)
-
     const createPhotoSqlQuery = _createPhotoBuildSql(photo, path)
-
     const { rows } = await db.getInstance().query(
       createPhotoSqlQuery.dbQuery,
       createPhotoSqlQuery.dbQueryValues
     )
 
-    logger.debug(`[createPhoto - : ${photo.id} - success]`)
-
     return rows
   } catch (error) {
-    logger.debug(`[createPhoto - : ${photo.id} - failed]`)
-
-    // postgres unique violation
+    // postgres unique violation code
     if (error.code === '23505') {
-      const message = `Photo already exist.`
-
-      throw common.buildError(409, message)
+      throw common.buildError(409, 'Photo already exist.')
     }
 
     throw common.buildError(500)
@@ -50,10 +41,7 @@ async function createPhoto (photo, path) {
  * @returns {Object}
  */
 function _createPhotoBuildSql (photo, path) {
-  const dbQuery = `INSERT INTO "photo" (id_user, id_challenge, description, path) VALUES ($1, $2, $3, $4);`
-
-  // TODO - encode password
-
+  const dbQuery = 'INSERT INTO "photo" (id_user, id_challenge, description, path) VALUES ($1, $2, $3, $4);'
   const dbQueryValues = [
     photo.id_user,
     photo.id_challenge,
@@ -73,22 +61,15 @@ function _createPhotoBuildSql (photo, path) {
  */
 async function getPhoto (idPhoto) {
   try {
-    logger.debug(`[getPhoto - photo id: ${idPhoto}]`)
-
     const getPhotoSqlQuery = _getPhotoBuildSql(idPhoto)
-
     const { rows } = await db.getInstance().query(
       getPhotoSqlQuery.dbQuery,
       getPhotoSqlQuery.dbQueryValues
     )
 
     if (!rows.length) {
-      const message = `Photo does not exist`
-
-      return Promise.reject(common.buildError(404, message))
+      return Promise.reject(common.buildError(404, 'Photo does not exist'))
     }
-
-    logger.debug(`[getPhoto - : ${idPhoto} - success]`)
 
     return rows[0]
   } catch (error) {
@@ -105,8 +86,8 @@ async function getPhoto (idPhoto) {
  * @returns {Object}
  */
 function _getPhotoBuildSql (idPhoto) {
-  const dbQuery = `SELECT id, id_user, id_challenge, description, path, created_at FROM "photo" WHERE "id" = $1;`
-  const dbQueryValues = [ idPhoto ]
+  const dbQuery = 'SELECT id, id_user, id_challenge, description, path, created_at FROM "photo" WHERE "id" = $1;'
+  const dbQueryValues = [idPhoto]
 
   return { dbQuery, dbQueryValues }
 }
@@ -120,18 +101,12 @@ function _getPhotoBuildSql (idPhoto) {
  */
 async function listPhotos (query) {
   try {
-    logger.debug(`[listPhotos]`)
-
     // TODO - handle pagination with query (offset, limit)
-
     const getListPhotosSqlQuery = _getListPhotosBuildSql(query)
-
     const { rows } = await db.getInstance().query(
       getListPhotosSqlQuery.dbQuery,
       getListPhotosSqlQuery.dbQueryValues
     )
-
-    logger.debug(`[listPhotos - success]`)
 
     return rows
   } catch (error) {
@@ -148,7 +123,7 @@ async function listPhotos (query) {
  * @returns {Object}
  */
 function _getListPhotosBuildSql (options) {
-  const dbQuery = `SELECT id, id_user, id_challenge, description, path, created_at FROM "photo" LIMIT 100;`
+  const dbQuery = 'SELECT id, id_user, id_challenge, description, path, created_at FROM "photo" LIMIT 100;'
   const dbQueryValues = []
 
   return { dbQuery, dbQueryValues }
@@ -163,22 +138,15 @@ function _getListPhotosBuildSql (options) {
  */
 async function deletePhoto (idPhoto) {
   try {
-    logger.debug(`[deletePhoto - photo id: ${idPhoto}]`)
-
     const deletePhotoSqlQuery = _deletePhotoBuildSql(idPhoto)
-
     const result = await db.getInstance().query(
       deletePhotoSqlQuery.dbQuery,
       deletePhotoSqlQuery.dbQueryValues
     )
 
     if (!result.rowCount) {
-      const message = `Photo does not exist`
-
-      return Promise.reject(common.buildError(404, message))
+      return Promise.reject(common.buildError(404, 'Photo does not exist'))
     }
-
-    logger.debug(`[deletePhoto - : ${idPhoto} - success]`)
 
     return {}
   } catch (error) {
@@ -195,8 +163,8 @@ async function deletePhoto (idPhoto) {
  * @returns {Object}
  */
 function _deletePhotoBuildSql (idPhoto) {
-  const dbQuery = `DELETE FROM "photo" WHERE "id" = $1;`
-  const dbQueryValues = [ idPhoto ]
+  const dbQuery = 'DELETE FROM "photo" WHERE "id" = $1;'
+  const dbQueryValues = [idPhoto]
 
   return { dbQuery, dbQueryValues }
 }
@@ -209,16 +177,11 @@ function _deletePhotoBuildSql (idPhoto) {
  */
 async function countPhoto () {
   try {
-    logger.debug(`[countPhoto]`)
-
     const getCountPhotosSqlQuery = _getCountPhotosBuildSql()
-
     const { rows } = await db.getInstance().query(
       getCountPhotosSqlQuery.dbQuery,
       getCountPhotosSqlQuery.dbQueryValues
     )
-
-    logger.debug(`[countPhoto - success]`)
 
     return rows
   } catch (error) {
@@ -235,7 +198,7 @@ async function countPhoto () {
  * @returns {Object}
  */
 function _getCountPhotosBuildSql () {
-  const dbQuery = `SELECT count(*) FROM "photo";`
+  const dbQuery = 'SELECT count(*) FROM "photo";'
   const dbQueryValues = []
 
   return { dbQuery, dbQueryValues }

@@ -16,10 +16,7 @@ const common = require(path.resolve('src/modules/common'))
  */
 async function countLike (req, res) {
   try {
-    logger.debug(`countLike`)
-
     // TODO - auth middleware
-
     const countLike = await likeModel.countLike()
 
     res.status(200).json(countLike[0])
@@ -36,8 +33,6 @@ async function countLike (req, res) {
  */
 async function getLike (req, res) {
   try {
-    logger.debug(`getLike`)
-
     // TODO - auth middleware
 
     const like = await likeModel.getLike(req.params.id_like)
@@ -52,8 +47,6 @@ async function getLike (req, res) {
 
 async function getLikesByPhoto (req, res) {
   try {
-    logger.debug(`getLikesByPhoto`)
-
     // TODO - auth middleware
 
     let likes
@@ -80,8 +73,6 @@ async function getLikesByPhoto (req, res) {
  */
 async function deleteLike (req, res) {
   try {
-    logger.debug(`deleteLike`)
-
     // TODO - auth middleware
 
     await likeModel.deleteLike(req.params.id_like)
@@ -100,8 +91,6 @@ async function deleteLike (req, res) {
  */
 async function postLike (req, res) {
   try {
-    logger.debug(`postLike`)
-
     // TODO - auth middleware
 
     await likeModel.createLike(req.body)

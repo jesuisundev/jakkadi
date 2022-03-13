@@ -151,7 +151,7 @@ describe('Unit test - Controller - Challenge', () => {
         initMocks()
 
         const challengeController = require(path.resolve('src/controllers/challenge'))
-        const req = httpMocks.createRequest({ body: {}, query: { 'count': 1 } })
+        const req = httpMocks.createRequest({ body: {}, query: { count: 1 } })
         const res = httpMocks.createResponse()
 
         await challengeController.listChallenges(req, res)

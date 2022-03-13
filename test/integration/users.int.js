@@ -21,7 +21,7 @@ describe('Integration test - User', () => {
   describe('[SCENARIO] Test happy path cases', () => {
     it('GET - Get count user should respond 200', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/user?count=1`,
+        '/jakkadi/v1/user?count=1',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -39,7 +39,7 @@ describe('Integration test - User', () => {
     it('POST - Post user with good payload should respond 201', async () => {
       const currentPayload = _.cloneDeep(fixtures.post.input.valid)
       const options = generatePayload(
-        `/jakkadi/v1/user`,
+        '/jakkadi/v1/user',
         'POST',
         currentPayload,
         { 'Content-Type': 'application/json' }
@@ -55,7 +55,7 @@ describe('Integration test - User', () => {
 
     it('GET - Get count user should respond 200', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/user?count=1`,
+        '/jakkadi/v1/user?count=1',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -72,7 +72,7 @@ describe('Integration test - User', () => {
 
     it('GET - Get user with good payload should respond 200', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/user/1`,
+        '/jakkadi/v1/user/1',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -88,7 +88,7 @@ describe('Integration test - User', () => {
 
     it('GET - Get list user with good payload should respond 200', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/user`,
+        '/jakkadi/v1/user',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -105,7 +105,7 @@ describe('Integration test - User', () => {
     it('POST - Post same user should respond 409', async () => {
       const currentPayload = _.cloneDeep(fixtures.post.input.valid)
       const options = generatePayload(
-        `/jakkadi/v1/user`,
+        '/jakkadi/v1/user',
         'POST',
         currentPayload,
         { 'Content-Type': 'application/json' }
@@ -121,7 +121,7 @@ describe('Integration test - User', () => {
     it('POST - Post user with bad payload should respond 400', () => {
       const currentPayload = {}
       const options = generatePayload(
-        `/jakkadi/v1/user`,
+        '/jakkadi/v1/user',
         'POST',
         currentPayload,
         { 'Content-Type': 'application/json' }
@@ -136,7 +136,7 @@ describe('Integration test - User', () => {
 
     it('DELETE - delete same user should respond 204', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/user/1`,
+        '/jakkadi/v1/user/1',
         'DELETE',
         {},
         { 'Content-Type': 'application/json' }
@@ -151,7 +151,7 @@ describe('Integration test - User', () => {
 
     it('DELETE - delete same user again should respond 404', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/user/1`,
+        '/jakkadi/v1/user/1',
         'DELETE',
         {},
         { 'Content-Type': 'application/json' }

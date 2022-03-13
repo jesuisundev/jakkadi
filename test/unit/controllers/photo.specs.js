@@ -100,7 +100,7 @@ describe('Unit test - Controller - Photo', () => {
         initMocks()
 
         const photoController = require(path.resolve('src/controllers/photo'))
-        const req = httpMocks.createRequest({ body: {}, query: { 'count': 1 } })
+        const req = httpMocks.createRequest({ body: {}, query: { count: 1 } })
         const res = httpMocks.createResponse()
 
         await photoController.listPhotos(req, res)

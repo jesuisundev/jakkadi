@@ -100,7 +100,7 @@ describe('Unit test - Controller - User', () => {
         initMocks()
 
         const userController = require(path.resolve('src/controllers/user'))
-        const req = httpMocks.createRequest({ body: {}, query: { 'count': 1 } })
+        const req = httpMocks.createRequest({ body: {}, query: { count: 1 } })
         const res = httpMocks.createResponse()
 
         await userController.listUsers(req, res)

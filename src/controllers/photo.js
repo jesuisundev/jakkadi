@@ -16,10 +16,7 @@ async function listPhotos (req, res) {
     await countPhoto(req, res)
   } else {
     try {
-      logger.debug(`listPhotos`)
-
       // TODO - auth middleware
-
       const photos = await photoModel.listPhotos(req.query)
 
       res.status(200).json(photos)
@@ -37,10 +34,7 @@ async function listPhotos (req, res) {
  */
 async function getPhoto (req, res) {
   try {
-    logger.debug(`getPhoto`)
-
     // TODO - auth middleware
-
     const photo = await photoModel.getPhoto(req.params.id_photo)
 
     res.status(200).json(photo)
@@ -57,10 +51,7 @@ async function getPhoto (req, res) {
  */
 async function deletePhoto (req, res) {
   try {
-    logger.debug(`deletePhoto`)
-
     // TODO - auth middleware
-
     await photoModel.deletePhoto(req.params.id_photo)
 
     res.status(204).json({})
@@ -77,12 +68,8 @@ async function deletePhoto (req, res) {
  */
 async function postPhoto (req, res) {
   try {
-    logger.debug(`postPhoto`)
-
     // TODO - auth middleware
-
     // TODO - s3 upload to get path
-
     await photoModel.createPhoto(req.body, 'path')
 
     res.status(201).json({})
@@ -102,10 +89,7 @@ async function postPhoto (req, res) {
  */
 async function countPhoto (req, res) {
   try {
-    logger.debug(`countPhoto`)
-
     // TODO - auth middleware
-
     const countPhoto = await photoModel.countPhoto()
 
     res.status(200).json(countPhoto[0])

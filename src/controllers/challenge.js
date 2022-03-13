@@ -17,10 +17,7 @@ async function listChallenges (req, res) {
     await countChallenge(req, res)
   } else {
     try {
-      logger.debug(`listChallenges`)
-
       // TODO - auth middleware
-
       const challenges = await challengeModel.listChallenges(req.query)
 
       res.status(200).json(challenges)
@@ -41,10 +38,6 @@ async function listChallenges (req, res) {
  */
 async function countChallenge (req, res) {
   try {
-    logger.debug(`countChallenge`)
-
-    // TODO - auth middleware
-
     const countChallenge = await challengeModel.countChallenge()
 
     res.status(200).json(countChallenge[0])
@@ -61,10 +54,7 @@ async function countChallenge (req, res) {
  */
 async function getChallenge (req, res) {
   try {
-    logger.debug(`getChallenge`)
-
     // TODO - auth middleware
-
     const challenge = await challengeModel.getChallenge(req.params.id_challenge)
 
     res.status(200).json(challenge)
@@ -77,10 +67,7 @@ async function getChallenge (req, res) {
 
 async function getPhotosByChallenge (req, res) {
   try {
-    logger.debug(`getPhotosByChallenge`)
-
     // TODO - auth middleware
-
     let challenge
     const cachedPhotosByChallenge = await common.getAsyncCache(`challenge:photos:${req.params.id_challenge}`)
 
@@ -105,10 +92,7 @@ async function getPhotosByChallenge (req, res) {
  */
 async function getCurrentChallenge (req, res) {
   try {
-    logger.debug(`getCurrentChallenge - controller`)
-
     let challenge = {}
-
     const cachedCurrentChallenge = await common.getAsyncCache(`challenge:current`)
 
     if (cachedCurrentChallenge) {
@@ -132,10 +116,6 @@ async function getCurrentChallenge (req, res) {
  */
 async function deleteChallenge (req, res) {
   try {
-    logger.debug(`deleteChallenge`)
-
-    // TODO - auth middleware
-
     await challengeModel.deleteChallenge(req.params.id_challenge)
 
     res.status(204).json({})
@@ -152,10 +132,6 @@ async function deleteChallenge (req, res) {
  */
 async function postChallenge (req, res) {
   try {
-    logger.debug(`postChallenge`)
-
-    // TODO - auth middleware
-
     await challengeModel.createChallenge(req.body)
     await common.delAsyncCache([`challenge:current`])
 

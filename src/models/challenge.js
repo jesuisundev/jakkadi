@@ -15,20 +15,14 @@ const common = require(path.resolve('src/modules/common'))
  */
 async function createChallenge (challenge) {
   try {
-    logger.debug(`[createChallenge - name: ${challenge.name}]`)
-
     const createChallengeSqlQuery = _createChallengeBuildSql(challenge)
-
     const { rows } = await db.getInstance().query(
       createChallengeSqlQuery.dbQuery,
       createChallengeSqlQuery.dbQueryValues
     )
 
-    logger.debug(`[createChallenge - : ${challenge.name} - success]`)
-
     return rows
   } catch (error) {
-    logger.debug(`[createChallenge - : ${challenge.name} - failed]`)
     logger.error(JSON.stringify(error))
 
     throw common.buildError(500)
@@ -42,7 +36,7 @@ async function createChallenge (challenge) {
  * @returns {Object}
  */
 function _createChallengeBuildSql (challenge) {
-  const dbQuery = `INSERT INTO "challenge" (name, description, date_start, date_end) VALUES ($1, $2, $3, $4);`
+  const dbQuery = 'INSERT INTO "challenge" (name, description, date_start, date_end) VALUES ($1, $2, $3, $4);'
   const dbQueryValues = [
     challenge.name,
     challenge.description,
@@ -62,22 +56,17 @@ function _createChallengeBuildSql (challenge) {
  */
 async function getChallenge (idChallenge) {
   try {
-    logger.debug(`[getChallenge - user id: ${idChallenge}]`)
-
     const getChallengeSqlQuery = _getChallengeBuildSql(idChallenge)
-
     const { rows } = await db.getInstance().query(
       getChallengeSqlQuery.dbQuery,
       getChallengeSqlQuery.dbQueryValues
     )
 
     if (!rows.length) {
-      const message = `Challenge does not exist`
+      const message = 'Challenge does not exist'
 
       return Promise.reject(common.buildError(404, message))
     }
-
-    logger.debug(`[getChallenge - : ${idChallenge} - success]`)
 
     return rows[0]
   } catch (error) {
@@ -94,8 +83,8 @@ async function getChallenge (idChallenge) {
  * @returns {Object}
  */
 function _getChallengeBuildSql (idChallenge) {
-  const dbQuery = `SELECT id, name, description, date_start, date_end, created_at FROM "challenge" WHERE "id" = $1;`
-  const dbQueryValues = [ idChallenge ]
+  const dbQuery = 'SELECT id, name, description, date_start, date_end, created_at FROM "challenge" WHERE "id" = $1;'
+  const dbQueryValues = [idChallenge]
 
   return { dbQuery, dbQueryValues }
 }
@@ -108,22 +97,17 @@ function _getChallengeBuildSql (idChallenge) {
  */
 async function getCurrentChallenge () {
   try {
-    logger.debug(`[getCurrentChallenge - model]`)
-
     const getCurrentChallengeSqlQuery = _getCurrentChallengeBuildSql()
-
     const { rows } = await db.getInstance().query(
       getCurrentChallengeSqlQuery.dbQuery,
       getCurrentChallengeSqlQuery.dbQueryValues
     )
 
     if (!rows.length) {
-      const message = `Current challenge does not exist`
+      const message = 'Current challenge does not exist'
 
       return Promise.reject(common.buildError(404, message))
     }
-
-    logger.debug(`[getCurrentChallenge - models - success]`)
 
     return rows[0]
   } catch (error) {
@@ -159,18 +143,12 @@ function _getCurrentChallengeBuildSql () {
  */
 async function listChallenges (query) {
   try {
-    logger.debug(`[listChallenges]`)
-
     // TODO - handle pagination with query (offset, limit)
-
     const getListChallengesSqlQuery = _getListChallengesBuildSql(query)
-
     const { rows } = await db.getInstance().query(
       getListChallengesSqlQuery.dbQuery,
       getListChallengesSqlQuery.dbQueryValues
     )
-
-    logger.debug(`[listChallenges - success]`)
 
     return rows
   } catch (error) {
@@ -189,18 +167,12 @@ async function listChallenges (query) {
  */
 async function getPhotosByChallenge (idChallenge) {
   try {
-    logger.debug(`[getPhotosByChallenge]`)
-
     // TODO - handle pagination with query (offset, limit)
-
     const getPhotoListChallengesSqlQuery = _getListPhotosByChallengeBuildSql(idChallenge)
-
     const { rows } = await db.getInstance().query(
       getPhotoListChallengesSqlQuery.dbQuery,
       getPhotoListChallengesSqlQuery.dbQueryValues
     )
-
-    logger.debug(`[getPhotosByChallenge - success]`)
 
     return rows
   } catch (error) {
@@ -221,11 +193,10 @@ function _getListPhotosByChallengeBuildSql (idChallenge) {
                   FROM "photo" 
                   WHERE "id_challenge" = $1
                   LIMIT 100;`
-  const dbQueryValues = [ idChallenge ]
+  const dbQueryValues = [idChallenge]
 
   return { dbQuery, dbQueryValues }
 }
-
 
 /**
  * Create the SQL to get a users list
@@ -234,7 +205,7 @@ function _getListPhotosByChallengeBuildSql (idChallenge) {
  * @returns {Object}
  */
 function _getListChallengesBuildSql (options) {
-  const dbQuery = `SELECT id, name, description, date_start, date_end, created_at FROM "challenge" LIMIT 100;`
+  const dbQuery = 'SELECT id, name, description, date_start, date_end, created_at FROM "challenge" LIMIT 100;'
   const dbQueryValues = []
 
   return { dbQuery, dbQueryValues }
@@ -249,8 +220,6 @@ function _getListChallengesBuildSql (options) {
  */
 async function deleteChallenge (idChallenge) {
   try {
-    logger.debug(`[deleteChallenge - challenge id: ${idChallenge}]`)
-
     const deleteChallengeSqlQuery = _deleteChallengeBuildSql(idChallenge)
 
     const result = await db.getInstance().query(
@@ -259,12 +228,8 @@ async function deleteChallenge (idChallenge) {
     )
 
     if (!result.rowCount) {
-      const message = `Challenge does not exist`
-
-      return Promise.reject(common.buildError(404, message))
+      return Promise.reject(common.buildError(404, 'Challenge does not exist'))
     }
-
-    logger.debug(`[deleteChallenge - : ${idChallenge} - success]`)
 
     return {}
   } catch (error) {
@@ -281,8 +246,8 @@ async function deleteChallenge (idChallenge) {
  * @returns {Object}
  */
 function _deleteChallengeBuildSql (idChallenge) {
-  const dbQuery = `DELETE FROM "challenge" WHERE "id" = $1;`
-  const dbQueryValues = [ idChallenge ]
+  const dbQuery = 'DELETE FROM "challenge" WHERE "id" = $1;'
+  const dbQueryValues = [idChallenge]
 
   return { dbQuery, dbQueryValues }
 }
@@ -295,16 +260,11 @@ function _deleteChallengeBuildSql (idChallenge) {
  */
 async function countChallenge () {
   try {
-    logger.debug(`[countChallenge]`)
-
     const getCountChallengesSqlQuery = _getCountChallengesBuildSql()
-
     const { rows } = await db.getInstance().query(
       getCountChallengesSqlQuery.dbQuery,
       getCountChallengesSqlQuery.dbQueryValues
     )
-
-    logger.debug(`[countChallenge - success]`)
 
     return rows
   } catch (error) {
@@ -321,7 +281,7 @@ async function countChallenge () {
  * @returns {Object}
  */
 function _getCountChallengesBuildSql () {
-  const dbQuery = `SELECT count(*) FROM "challenge";`
+  const dbQuery = 'SELECT count(*) FROM "challenge";'
   const dbQueryValues = []
 
   return { dbQuery, dbQueryValues }

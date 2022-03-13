@@ -31,34 +31,36 @@ describe('Unit tests - modules - cache manager', () => {
   describe('cacheManager', () => {
     it('Should create instance of cache once and simply return it after', () => {
       initMocks()
-      let cacheManager = require(path.resolve('src/modules/cacheManager'))
-      let instanceCache = cacheManager.cacheSingleton.getInstance()
-      instanceCache = cacheManager.cacheSingleton.getInstance()
+      const cacheSingleton = require(path.resolve('src/modules/cacheManager'))
+      let instanceCache = cacheSingleton.cacheSingleton.getInstance()
+      instanceCache = cacheSingleton.cacheSingleton.getInstance()
+
       expect(instanceCache).to.be.an('object')
     })
 
     it('Validate that close works', () => {
       initMocks()
-      let cacheManager = require(path.resolve('src/modules/cacheManager'))
-      let instanceCache = cacheManager.cacheSingleton.getInstance()
-      cacheManager.cacheSingleton.close()
+      const cacheSingleton = require(path.resolve('src/modules/cacheManager'))
+      const instanceCache = cacheSingleton.cacheSingleton.getInstance()
+      cacheSingleton.cacheSingleton.close()
 
       expect(instanceCache).to.be.an('object')
       expect(endStub.calledOnce).to.equal(true)
     })
 
     it('Should create instance of cache once and simply return it after when redis is down', () => {
-      let cacheManager = require(path.resolve('src/modules/cacheManager'))
-      let instanceCache = cacheManager.cacheSingleton.getInstance()
-      instanceCache = cacheManager.cacheSingleton.getInstance()
+      const cacheSingleton = require(path.resolve('src/modules/cacheManager'))
+      let instanceCache = cacheSingleton.cacheSingleton.getInstance()
+      instanceCache = cacheSingleton.cacheSingleton.getInstance()
+
       expect(instanceCache).to.be.an('object')
     })
 
     it('Validate that close does not crash when no instance created', () => {
       initMocks()
-      let cacheManager = require(path.resolve('src/modules/cacheManager'))
+      const cacheSingleton = require(path.resolve('src/modules/cacheManager'))
+      cacheSingleton.cacheSingleton.close()
 
-      cacheManager.cacheSingleton.close()
       expect(endStub.calledOnce).to.equal(false)
     })
   })

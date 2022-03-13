@@ -39,7 +39,7 @@ describe('Integration test - Challenge', () => {
     it('POST - Post challenge with good payload should respond 201', async () => {
       const currentPayload = _.cloneDeep(fixtures.post.input.valid)
       const options = generatePayload(
-        `/jakkadi/v1/challenge`,
+        '/jakkadi/v1/challenge',
         'POST',
         currentPayload,
         { 'Content-Type': 'application/json' }
@@ -55,7 +55,7 @@ describe('Integration test - Challenge', () => {
 
     it('GET - Get count challenge should respond 200', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/challenge?count=1`,
+        '/jakkadi/v1/challenge?count=1',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -72,7 +72,7 @@ describe('Integration test - Challenge', () => {
 
     it('GET - Get challenge with good payload should respond 200', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/challenge/1`,
+        '/jakkadi/v1/challenge/1',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -88,7 +88,7 @@ describe('Integration test - Challenge', () => {
 
     it('GET - Get list challenge with good payload should respond 200', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/challenge`,
+        '/jakkadi/v1/challenge',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -105,7 +105,7 @@ describe('Integration test - Challenge', () => {
     it('POST - Post challenge with bad payload should respond 400', () => {
       const currentPayload = {}
       const options = generatePayload(
-        `/jakkadi/v1/challenge`,
+        '/jakkadi/v1/challenge',
         'POST',
         currentPayload,
         { 'Content-Type': 'application/json' }
@@ -120,7 +120,7 @@ describe('Integration test - Challenge', () => {
 
     it('GET - Get current challenge with good payload should respond 404', () => {
       const options = generatePayload(
-        `/jakkadi/v1/current/challenge/`,
+        '/jakkadi/v1/current/challenge/',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -137,7 +137,7 @@ describe('Integration test - Challenge', () => {
       const currentPayload = _.cloneDeep(fixtures.post.input.valid)
       currentPayload.date_end = new Date(Date.now() + 1 * 24 * 3600 * 1000)
       const options = generatePayload(
-        `/jakkadi/v1/challenge`,
+        '/jakkadi/v1/challenge',
         'POST',
         currentPayload,
         { 'Content-Type': 'application/json' }
@@ -152,7 +152,7 @@ describe('Integration test - Challenge', () => {
 
     it('GET - Get current challenge with good payload should respond 200', () => {
       const options = generatePayload(
-        `/jakkadi/v1/current/challenge/`,
+        '/jakkadi/v1/current/challenge/',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -168,7 +168,7 @@ describe('Integration test - Challenge', () => {
 
     it('GET - Get photo by challenge with good payload should respond 200', () => {
       const options = generatePayload(
-        `/jakkadi/v1/challenge/1/photo/`,
+        '/jakkadi/v1/challenge/1/photo/',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -184,7 +184,7 @@ describe('Integration test - Challenge', () => {
 
     it('DELETE - delete same challenge should respond 204', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/challenge/1`,
+        '/jakkadi/v1/challenge/1',
         'DELETE',
         {},
         { 'Content-Type': 'application/json' }
@@ -199,7 +199,7 @@ describe('Integration test - Challenge', () => {
 
     it('DELETE - delete same challenge again should respond 404', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/challenge/1`,
+        '/jakkadi/v1/challenge/1',
         'DELETE',
         {},
         { 'Content-Type': 'application/json' }

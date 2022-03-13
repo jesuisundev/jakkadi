@@ -21,7 +21,7 @@ describe('Integration test - Photo', () => {
   describe('[SCENARIO] Test happy path cases', () => {
     it('GET - Get count photo should respond 200', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/photo?count=1`,
+        '/jakkadi/v1/photo?count=1',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -39,7 +39,7 @@ describe('Integration test - Photo', () => {
     it('POST - Post photo with good payload should respond 201', async () => {
       const currentPayload = _.cloneDeep(fixtures.post.input.valid)
       const options = generatePayload(
-        `/jakkadi/v1/photo`,
+        '/jakkadi/v1/photo',
         'POST',
         currentPayload,
         { 'Content-Type': 'application/json' }
@@ -55,7 +55,7 @@ describe('Integration test - Photo', () => {
 
     it('GET - Get count photo should respond 200', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/photo?count=1`,
+        '/jakkadi/v1/photo?count=1',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -72,7 +72,7 @@ describe('Integration test - Photo', () => {
 
     it('GET - Get photo with good payload should respond 200', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/photo/1`,
+        '/jakkadi/v1/photo/1',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -88,7 +88,7 @@ describe('Integration test - Photo', () => {
 
     it('GET - Get list photo with good payload should respond 200', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/photo`,
+        '/jakkadi/v1/photo',
         'GET',
         {},
         { 'Content-Type': 'application/json' }
@@ -105,7 +105,7 @@ describe('Integration test - Photo', () => {
     it('POST - Post same photo should respond 409', async () => {
       const currentPayload = _.cloneDeep(fixtures.post.input.valid)
       const options = generatePayload(
-        `/jakkadi/v1/photo`,
+        '/jakkadi/v1/photo',
         'POST',
         currentPayload,
         { 'Content-Type': 'application/json' }
@@ -121,7 +121,7 @@ describe('Integration test - Photo', () => {
     it('POST - Post photo with bad payload should respond 400', () => {
       const currentPayload = {}
       const options = generatePayload(
-        `/jakkadi/v1/photo`,
+        '/jakkadi/v1/photo',
         'POST',
         currentPayload,
         { 'Content-Type': 'application/json' }
@@ -136,7 +136,7 @@ describe('Integration test - Photo', () => {
 
     it('DELETE - delete same photo should respond 204', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/photo/1`,
+        '/jakkadi/v1/photo/1',
         'DELETE',
         {},
         { 'Content-Type': 'application/json' }
@@ -151,7 +151,7 @@ describe('Integration test - Photo', () => {
 
     it('DELETE - delete same photo again should respond 404', async () => {
       const options = generatePayload(
-        `/jakkadi/v1/photo/1`,
+        '/jakkadi/v1/photo/1',
         'DELETE',
         {},
         { 'Content-Type': 'application/json' }

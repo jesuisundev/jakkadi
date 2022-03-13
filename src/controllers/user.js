@@ -16,10 +16,7 @@ async function listUsers (req, res) {
     await countUser(req, res)
   } else {
     try {
-      logger.debug(`listUsers`)
-
       // TODO - auth middleware
-
       const users = await userModel.listUsers(req.query)
 
       res.status(200).json(users)
@@ -37,10 +34,7 @@ async function listUsers (req, res) {
  */
 async function getUser (req, res) {
   try {
-    logger.debug(`getUser`)
-
     // TODO - auth middleware
-
     const user = await userModel.getUser(req.params.id_user)
 
     res.status(200).json(user)
@@ -57,10 +51,7 @@ async function getUser (req, res) {
  */
 async function deleteUser (req, res) {
   try {
-    logger.debug(`deleteUser`)
-
     // TODO - auth middleware
-
     await userModel.deleteUser(req.params.id_user)
 
     res.status(204).json({})
@@ -77,10 +68,7 @@ async function deleteUser (req, res) {
  */
 async function postUser (req, res) {
   try {
-    logger.debug(`postUser`)
-
     // TODO - auth middleware
-
     await userModel.createUser(req.body)
 
     res.status(201).json({})
@@ -100,10 +88,7 @@ async function postUser (req, res) {
  */
 async function countUser (req, res) {
   try {
-    logger.debug(`countUser`)
-
     // TODO - auth middleware
-
     const countUser = await userModel.countUser()
 
     res.status(200).json(countUser[0])

@@ -1,5 +1,7 @@
 'use strict'
 
+const migrationRunner = require('node-pg-migrate').default
+
 const path = require('path')
 
 const dbUser = process.env['JAKKADI_POSTGRES_USER']
@@ -8,8 +10,6 @@ const dbName = process.env['JAKKADI_POSTGRES_DATABASE']
 const dbHost = process.env['JAKKADI_POSTGRES_HOST']
 
 const databaseUrl = `postgres://${dbUser}:${dbPass}@${dbHost}:5432/${dbName}`
-
-const migrationRunner = require('node-pg-migrate')
 
 function dbUp () {
   const options = {

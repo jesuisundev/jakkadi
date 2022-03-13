@@ -6,7 +6,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const os = require('os')
 const route4express = require('route4express')
-const joi4express = require('joi4express')
+const joi4express = require(path.resolve('src/modules/joi4express'))
 const lout4express = require('lout4express')
 
 module.exports = function (config) {
@@ -45,8 +45,7 @@ module.exports = function (config) {
      * @return {Object}       server response
      */
     app.use((err, req, res, next) => {
-      logger.debug(`[global express error handler]`)
-
+      logger.debug('[global express error handler]')
       const finalError = {
         output: {}
       }
